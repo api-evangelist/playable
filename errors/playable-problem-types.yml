@@ -1,0 +1,53 @@
+generated: '2026-08-12'
+method: derived
+source: openapi/playable-api-openapi.yml
+format: bespoke-json
+rfc9457: false
+envelope:
+  shape: '{"message": "<string>"}'
+  content_type: application/json
+  note: >-
+    Playable does not publish RFC 9457 problem details. There is no stable error `type` URI, no
+    machine-readable error code, and no per-error documentation page — an agent can only branch on
+    the HTTP status and a free-text message string.
+problems:
+- status: 400
+  title: Invalid request
+  description: Invalid request
+  source_operation: 'openapi/playable-api-openapi.yml#POST /oauth/token'
+  operations: 1
+- status: 401
+  title: Unauthorized
+  description: |
+    Unauthorized.
+
+    Possible reasons:
+    Token has expired
+  body_field: message
+  body_example_hint: 'Unauthenticated.'
+  source_operation: 'openapi/playable-api-openapi.yml#GET /v1/campaigns'
+  operations: 41
+  note: The only error response declared on every authenticated operation in the spec.
+- status: 403
+  title: Unable to locate campaign type
+  description: Unable to locate campaign type
+  source_operation: 'openapi/playable-api-openapi.yml#GET /v1/campaign-type/{campaignType}'
+  operations: 1
+  note: >-
+    Modelled as 403 rather than 404 for a missing campaign type — a semantic deviation worth knowing
+    before writing retry/branch logic.
+- status: 404
+  title: Not found / unsupported game
+  description: "If it's not a supported game, it'll return an empty array."
+  source_operation: 'openapi/playable-api-openapi.yml#GET /v1/campaign/{campaign}/game-data-statistics'
+  operations: 1
+coverage:
+  operations_total: 41
+  operations_with_a_4xx: 41
+  operations_with_a_5xx: 0
+  distinct_error_statuses: [400, 401, 403, 404]
+  note: >-
+    No 5xx response is declared anywhere in the spec, and no 422/429 is declared despite the
+    documented 3,600/hour rate limit — a client cannot learn the throttled status from the contract.
+    See errors/playable-integration-status-codes.yml for the status codes Playable DOES document, on
+    the outbound integration/webhook delivery side.

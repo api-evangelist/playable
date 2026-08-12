@@ -1,0 +1,94 @@
+generated: '2026-08-12'
+method: searched
+source: live GET probes of /.well-known/ on every Playable host
+note: >-
+  Two real documents are served — RFC 8414 authorization-server metadata and RFC 9728
+  protected-resource metadata, both on the marketing/web property playable.com, and both describing
+  the MCP surface (scope `mcp`, resource https://playable.com/wp-json/mcp/mcp-oauth-server). The API
+  host api.playable.com serves nothing under /.well-known/. help.playable.com DOES return 200 for
+  /.well-known/security.txt but the document is INTERCOM's (Canonical: app.intercom.com,
+  Contact: bugcrowd.com/intercom) — it is the help-center vendor's file, not Playable's, so no
+  SecurityTxt pointer is emitted. sdk.playable.com is an S3/CloudFront origin that answers 403
+  AccessDenied for every /.well-known/ path.
+hosts:
+- host: https://playable.com
+  documents:
+  - path: /.well-known/oauth-authorization-server   # RFC 8414
+    status: 200
+    file: playable-oauth-authorization-server.json
+  - path: /.well-known/oauth-protected-resource     # RFC 9728
+    status: 200
+    file: playable-oauth-protected-resource.json
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: https://api.playable.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: https://app.playable.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: https://help.playable.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    file: null
+    third_party: intercom
+    note: >-
+      Served by Intercom for the hosted help center; Canonical points at
+      https://app.intercom.com/.well-known/security.txt and Contact at bugcrowd.com/intercom.
+      Not a Playable-published disclosure policy — not saved, not credited.
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: https://sdk.playable.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 403
+  - path: /.well-known/agent-card.json
+    status: 403
+  - path: /.well-known/agent.json
+    status: 403
+- host: https://api.dev.playable.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+agent_card:
+  found: false
+  note: >-
+    No A2A Agent Card at either the canonical /.well-known/agent-card.json or the legacy
+    /.well-known/agent.json on any of the six hosts probed. No a2a/ artifact is written.

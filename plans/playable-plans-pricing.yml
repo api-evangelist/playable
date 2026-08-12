@@ -1,0 +1,66 @@
+generated: '2026-08-12'
+method: searched
+source: https://playable.com/pricing/
+plan_count: 3
+pricing_model: contact-sales
+currency: null
+billing_period: null
+note: >-
+  Playable publishes three named tiers with feature sets but NO price, currency, billing period,
+  quota or overage figure on any of them — every tier routes to a "chat with a gamification
+  specialist" contact form. Campaign volume is unlimited on all three; the tiers differentiate on
+  seats, success-management level, integration depth and security. API access is gated to the top
+  tier, which is the single most consequential fact here for an API consumer.
+plans:
+- name: Essentials
+  positioning: For getting started
+  price: null
+  currency: null
+  billing_period: null
+  included:
+  - unlimited campaigns
+  - 1 user
+  - one-to-one onboarding
+  - shared Customer Success plan
+  - standard integrations
+  api_access: false
+  overage: null
+- name: Core
+  positioning: Supports growing teams (marked "most popular")
+  price: null
+  currency: null
+  billing_period: null
+  included:
+  - unlimited campaigns
+  - multiple users
+  - one-to-one onboarding
+  - dedicated Customer Success
+  - standard and web-hook integrations
+  - sub-domain access
+  api_access: false
+  webhooks: true
+  overage: null
+- name: Premium
+  positioning: Supports advanced requirements
+  price: null
+  currency: null
+  billing_period: null
+  included:
+  - unlimited campaigns
+  - accommodates teams
+  - one-to-one onboarding
+  - premium Customer Success
+  - standard, web-hook AND API integrations
+  - sub-domain access
+  - advanced security
+  - advanced account structure
+  api_access: true
+  webhooks: true
+  overage: null
+limits_attached_to_tiers:
+  note: >-
+    No per-tier API quota is published. The single published API limit — 3,600 requests/hour per
+    developer app — is stated in the OpenAPI as a hard platform limit, not as a tier attribute.
+    See rate-limits/playable-rate-limits.yml.
+x-evidence:
+- {fetched: '2026-08-12', url: 'https://playable.com/pricing/', http_status: 200}

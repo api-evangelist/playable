@@ -1,0 +1,397 @@
+generated: '2026-08-12'
+method: derived
+source: openapi/playable-api-openapi.yml
+docs: https://api.playable.com/
+reference: https://help.playable.com/en/articles/10384051-developer
+grant: client_credentials
+scope_count: 37
+note: 'All 37 scopes come from the OAuth2 clientCredentials flow declared in the provider OpenAPI. Playable
+  publishes NO separate scopes/permissions reference page — the spec is the only source, and every scope
+  description it carries is the placeholder string "Grant right to" with no object and no semantics (preserved
+  verbatim as provider_description). The description field on each entry below is DERIVED by API Evangelist
+  from the summary of the operation(s) that require that scope, and each entry lists those operations
+  by METHOD + path because the spec declares no operationId. Nothing is invented: a scope with no operation
+  gets a null description. Scope granularity itself is genuinely good — 37 scopes across list/view/modify/delete
+  verbs — so publishing real scope descriptions would be a cheap, high-value fix for Playable.'
+orphan_scopes: []
+schemes:
+- name: clientCredentials
+  source: openapi/playable-api-openapi.yml
+  flows:
+  - flow: clientCredentials
+    tokenUrl: /oauth/token
+scopes:
+- scope: campaigns.activate
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/playable-api-openapi.yml
+  provider_description: Grant right to
+  description: Activate Campaign
+  operations:
+  - POST /v1/campaign/{campaign}/activate
+  description_method: derived-from-operation-summary
+- scope: campaigns.bulk-prizes-items.send-email
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/playable-api-openapi.yml
+  provider_description: Grant right to
+  description: Send email to winner
+  operations:
+  - POST /v1/campaign/{campaign}/bulk-prize/{bulkPrize}/item/{bulkPrizeItem}/send/email
+  description_method: derived-from-operation-summary
+- scope: campaigns.bulk-prizes.list
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/playable-api-openapi.yml
+  provider_description: Grant right to
+  description: Campaign Bulk Prizes
+  operations:
+  - GET /v1/campaign/{campaign}/bulk-prizes
+  description_method: derived-from-operation-summary
+- scope: campaigns.bulk-prizes.modify
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/playable-api-openapi.yml
+  provider_description: Grant right to
+  description: Campaign Bulk Prize
+  operations:
+  - PATCH /v1/campaign/{campaign}/bulk-prize/{bulkPrize}
+  description_method: derived-from-operation-summary
+- scope: campaigns.bulk-prizes.view
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/playable-api-openapi.yml
+  provider_description: Grant right to
+  description: Get a single campaign bulk prize resource
+  operations:
+  - GET /v1/campaign/{campaign}/bulk-prize/{bulkPrize}
+  description_method: derived-from-operation-summary
+- scope: campaigns.clear-cache
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/playable-api-openapi.yml
+  provider_description: Grant right to
+  description: Campaign Clear Cache
+  operations:
+  - POST /v1/campaign/{campaign}/clear-cache
+  description_method: derived-from-operation-summary
+- scope: campaigns.copy
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/playable-api-openapi.yml
+  provider_description: Grant right to
+  description: Campaign copy
+  operations:
+  - POST /v1/campaign/copy/{campaign}
+  description_method: derived-from-operation-summary
+- scope: campaigns.delete
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/playable-api-openapi.yml
+  provider_description: Grant right to
+  description: Delete Campaign
+  operations:
+  - DELETE /v1/campaign/{campaign}
+  description_method: derived-from-operation-summary
+- scope: campaigns.email-log.list
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/playable-api-openapi.yml
+  provider_description: Grant right to
+  description: Campaign email logs
+  operations:
+  - GET /v1/campaign/{campaign}/email-log
+  description_method: derived-from-operation-summary
+- scope: campaigns.email-log.view
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/playable-api-openapi.yml
+  provider_description: Grant right to
+  description: Campaign email log
+  operations:
+  - GET /v1/campaign/{campaign}/email-log/{emailLog}
+  description_method: derived-from-operation-summary
+- scope: campaigns.game-data-statistics
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/playable-api-openapi.yml
+  provider_description: Grant right to
+  description: Campaign game data statistic
+  operations:
+  - GET /v1/campaign/{campaign}/game-data-statistics
+  description_method: derived-from-operation-summary
+- scope: campaigns.game-settings.modify
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/playable-api-openapi.yml
+  provider_description: Grant right to
+  description: Update campaign game settings
+  operations:
+  - PATCH /v1/campaign/{campaign}/game-settings
+  description_method: derived-from-operation-summary
+- scope: campaigns.game-settings.view
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/playable-api-openapi.yml
+  provider_description: Grant right to
+  description: View campaign game settings
+  operations:
+  - GET /v1/campaign/{campaign}/game-settings
+  description_method: derived-from-operation-summary
+- scope: campaigns.integrations.list
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/playable-api-openapi.yml
+  provider_description: Grant right to
+  description: Campaign Integrations
+  operations:
+  - GET /v1/campaign/{campaign}/integrations
+  description_method: derived-from-operation-summary
+- scope: campaigns.list
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/playable-api-openapi.yml
+  provider_description: Grant right to
+  description: Campaigns list
+  operations:
+  - GET /v1/campaigns
+  description_method: derived-from-operation-summary
+- scope: campaigns.modify
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/playable-api-openapi.yml
+  provider_description: Grant right to
+  description: Update Campaign
+  operations:
+  - POST /v1/campaign/{campaign}
+  description_method: derived-from-operation-summary
+- scope: campaigns.pause
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/playable-api-openapi.yml
+  provider_description: Grant right to
+  description: Pause Campaign
+  operations:
+  - POST /v1/campaign/{campaign}/pause
+  description_method: derived-from-operation-summary
+- scope: campaigns.prizes.list
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/playable-api-openapi.yml
+  provider_description: Grant right to
+  description: Campaign prizes
+  operations:
+  - GET /v1/campaign/{campaign}/prizes
+  description_method: derived-from-operation-summary
+- scope: campaigns.prizes.view
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/playable-api-openapi.yml
+  provider_description: Grant right to
+  description: Campaign prize
+  operations:
+  - GET /v1/campaign/{campaign}/prize/{prize}
+  description_method: derived-from-operation-summary
+- scope: campaigns.registrations.delete
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/playable-api-openapi.yml
+  provider_description: Grant right to
+  description: Delete campaign registration
+  operations:
+  - DELETE /v1/campaign/{campaign}/registration/{registration}
+  description_method: derived-from-operation-summary
+- scope: campaigns.registrations.list
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/playable-api-openapi.yml
+  provider_description: Grant right to
+  description: Campaign registrations
+  operations:
+  - GET /v1/campaign/{campaign}/registrations
+  description_method: derived-from-operation-summary
+- scope: campaigns.registrations.view
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/playable-api-openapi.yml
+  provider_description: Grant right to
+  description: Campaign registration
+  operations:
+  - GET /v1/campaign/{campaign}/registration/{registration}
+  description_method: derived-from-operation-summary
+- scope: campaigns.resume
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/playable-api-openapi.yml
+  provider_description: Grant right to
+  description: Resume campaign
+  operations:
+  - POST /v1/campaign/{campaign}/resume
+  description_method: derived-from-operation-summary
+- scope: campaigns.sections.form-fields.list
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/playable-api-openapi.yml
+  provider_description: Grant right to
+  description: Campaign Section Form Fields
+  operations:
+  - GET /v1/campaign/{campaign}/section/{section}/form-fields
+  description_method: derived-from-operation-summary
+- scope: campaigns.sections.form-fields.view
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/playable-api-openapi.yml
+  provider_description: Grant right to
+  description: Campaign Section Form Field
+  operations:
+  - GET /v1/campaign/{campaign}/section/{section}/form-field/{formField}
+  description_method: derived-from-operation-summary
+- scope: campaigns.sections.list
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/playable-api-openapi.yml
+  provider_description: Grant right to
+  description: Campaign Sections
+  operations:
+  - GET /v1/campaign/{campaign}/sections
+  description_method: derived-from-operation-summary
+- scope: campaigns.sections.view
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/playable-api-openapi.yml
+  provider_description: Grant right to
+  description: Campaign Section
+  operations:
+  - GET /v1/campaign/{campaign}/section/{section}
+  description_method: derived-from-operation-summary
+- scope: campaigns.sms-log.list
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/playable-api-openapi.yml
+  provider_description: Grant right to
+  description: Campaign sms logs
+  operations:
+  - GET /v1/campaign/{campaign}/sms-log
+  description_method: derived-from-operation-summary
+- scope: campaigns.sms-log.view
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/playable-api-openapi.yml
+  provider_description: Grant right to
+  description: Campaign sms log
+  operations:
+  - GET /v1/campaign/{campaign}/sms-log/{smsLog}
+  description_method: derived-from-operation-summary
+- scope: campaigns.types.list
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/playable-api-openapi.yml
+  provider_description: Grant right to
+  description: Campaign types
+  operations:
+  - GET /v1/campaign-types
+  description_method: derived-from-operation-summary
+- scope: campaigns.types.view
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/playable-api-openapi.yml
+  provider_description: Grant right to
+  description: This API responds with a single campaign type resource.
+  operations:
+  - GET /v1/campaign-type/{campaignType}
+  description_method: derived-from-operation-summary
+- scope: campaigns.view
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/playable-api-openapi.yml
+  provider_description: Grant right to
+  description: Campaign Statistics Registrations; Campaign Statistics Sessions; Campaign statistics; Show
+    a single campaign
+  operations:
+  - GET /v1/campaign/{campaign}
+  - GET /v1/campaign/{campaign}/statistics
+  - GET /v1/campaign/{campaign}/statistics/sessions
+  - GET /v1/campaign/{campaign}/statistics/registrations
+  description_method: derived-from-operation-summary
+- scope: campaigns.voucher.delete
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/playable-api-openapi.yml
+  provider_description: Grant right to
+  description: Delete Campaign vouchers
+  operations:
+  - DELETE /v1/campaign/voucher
+  description_method: derived-from-operation-summary
+- scope: campaigns.voucher.list
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/playable-api-openapi.yml
+  provider_description: Grant right to
+  description: Campaign vouchers
+  operations:
+  - GET /v1/campaign/{campaign}/vouchers
+  description_method: derived-from-operation-summary
+- scope: campaigns.voucher.view
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/playable-api-openapi.yml
+  provider_description: Grant right to
+  description: Campaign voucher
+  operations:
+  - GET /v1/campaign/{campaign}/voucher/{voucher}
+  description_method: derived-from-operation-summary
+- scope: media.upload
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/playable-api-openapi.yml
+  provider_description: Grant right to
+  description: Upload media
+  operations:
+  - POST /v1/media/upload
+  description_method: derived-from-operation-summary
+- scope: user.create-login-token
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/playable-api-openapi.yml
+  provider_description: Grant right to
+  description: Create login user token
+  operations:
+  - POST /v1/user/create-login-token
+  description_method: derived-from-operation-summary

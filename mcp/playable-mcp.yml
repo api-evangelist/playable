@@ -1,0 +1,48 @@
+generated: '2026-08-12'
+method: searched
+status: published
+source: https://playable.com/.well-known/oauth-protected-resource
+discovery:
+  route: RFC 9728 protected-resource metadata on the Playable web property
+  files:
+  - well-known/playable-oauth-protected-resource.json
+  - well-known/playable-oauth-authorization-server.json
+server:
+  name: playable
+  transport: http
+  url: https://playable.com/wp-json/mcp/mcp-oauth-server
+  implementation: >-
+    WordPress REST namespace (wp-json/mcp/...), i.e. the MCP surface is served by the marketing/web
+    property, not by the campaign API host api.playable.com. It is not advertised in the developer
+    documentation; it was found only via the /.well-known/ probe.
+auth:
+  gated: true
+  methods: [oauth2]
+  oauth2:
+    authorization_server: https://playable.com
+    authorization_endpoint: https://playable.com/oauth/authorize
+    token_endpoint: https://playable.com/oauth/token
+    revocation_endpoint: https://playable.com/oauth/revoke
+    grant_types: [authorization_code, refresh_token]
+    response_types: [code]
+    pkce: S256
+    scopes_supported: [mcp]
+    token_endpoint_auth_methods_supported: [none]
+    client_id_metadata_document_supported: true
+    bearer_methods_supported: [header]
+    discovery: well-known/playable-oauth-authorization-server.json
+tools:
+  enumerated: false
+  count: null
+  note: >-
+    NO FABRICATION. An anonymous POST of {"jsonrpc":"2.0","id":1,"method":"tools/list"} with
+    Accept: application/json, text/event-stream returned HTTP 401
+    {"code":"mcp_unauthorized","message":"MCP authentication required."}. The live tool set and the
+    per-tool inputSchema therefore require an authenticated introspection with an OAuth token
+    carrying the `mcp` scope. No llms.txt exists on any Playable host to fall back to (playable.com
+    /llms.txt 404; app.playable.com/llms.txt returns the SPA shell, not a document), so no tool
+    names are recorded rather than guessed.
+x-evidence:
+- {fetched: '2026-08-12', url: 'https://playable.com/.well-known/oauth-protected-resource', http_status: 200, content_type: application/json}
+- {fetched: '2026-08-12', url: 'https://playable.com/.well-known/oauth-authorization-server', http_status: 200, content_type: application/json}
+- {fetched: '2026-08-12', url: 'https://playable.com/wp-json/mcp/mcp-oauth-server', method: 'POST tools/list', http_status: 401, body: 'mcp_unauthorized'}

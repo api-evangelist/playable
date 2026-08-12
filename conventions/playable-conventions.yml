@@ -1,0 +1,109 @@
+generated: '2026-08-12'
+method: searched
+source: https://api.playable.com/openapi.yaml
+docs: https://help.playable.com/en/articles/10384051-developer
+authentication:
+  style: oauth2-client-credentials
+  token_endpoint: https://api.playable.com/oauth/token
+  header: 'Authorization: Bearer {{ACCESS_TOKEN}}'
+  credentials: >-
+    Created in the platform under Global settings / Developer apps. API access is a Premium-plan
+    entitlement per the published pricing page.
+  required_headers:
+  - name: Authorization
+    note: Bearer access token; every non-/oauth/token operation is marked "requires authentication".
+  - name: Accept
+    value: application/json
+    note: Only application/json is supported for the response type.
+  cross_link: authentication/playable-authentication.yml
+idempotency:
+  supported: false
+  note: >-
+    NOT documented and NOT present in the spec. No Idempotency-Key header or parameter appears in any
+    of the 41 operations, and the developer documentation makes no retry-safety commitment — this
+    matters because the write surface includes non-obviously-repeatable actions
+    (POST .../activate, POST .../resume, POST .../bulk-prize/.../send/email, POST /v1/campaign/copy).
+    No `Idempotency` pointer is emitted for this provider.
+pagination:
+  style: page-number
+  request:
+    param: page
+    location: query
+    per_page_param: null
+    note: Page size is not settable via a documented parameter; the response reports the server's per_page.
+  response:
+    envelope: data
+    links_object:
+      field: links
+      members: [first, last, prev, next]
+      form: absolute URLs, e.g. https://api.playable.com/v1/route?page=2
+    meta_object:
+      field: meta
+      members: [current_page, from, path, per_page, to]
+      note: No `total` / `last_page` count is published in the meta block.
+filtering_and_sorting:
+  sort:
+    param: sort
+    form: comma-separated multi-sort
+    example_fields: [name, created_on]
+    directions: [asc, desc]
+  filters:
+    convention: filter_<field> query parameters
+    examples: [filter_template, filter_name, filter_type, filter_display]
+field_expansion:
+  param: with
+  style: comma-separated list of extra field groups on the collection/resource
+  campaign_options:
+  - registrations
+  - sessions
+  - is_instant_win
+  - has_data_wiped
+  - integrations
+  - sections
+  - sections.form_fields
+  - bulk_prizes
+  - sections.sessions
+  note: Playable's equivalent of sparse-fieldset/expansion; opt-in, not returned by default.
+metadata:
+  custom_metadata_object: false
+  note: >-
+    No arbitrary key/value metadata bag on resources. Campaign-level custom data is modelled through
+    registration form fields and the game-data statistics surface instead.
+request_tracing:
+  request_id_header: null
+  observed_response_headers:
+  - x-amzn-requestid
+  - x-amz-apigw-id
+  - x-amzn-trace-id
+  note: >-
+    Observed on a live anonymous 401 from https://api.playable.com/v1/campaigns on 2026-08-12. These
+    are AWS API Gateway infrastructure identifiers, not a documented Playable correlation-id contract
+    — usable for a support ticket, but the provider does not name them in the docs.
+versioning:
+  scheme: uri-path
+  current: v1
+  spec_info_version: 1.0.0
+  note: All resource operations sit under /v1/; the token endpoint /oauth/token is unversioned.
+  cross_link: lifecycle/playable-lifecycle.yml
+error_envelope:
+  format: bespoke-json
+  rfc9457: false
+  shape: '{"message": "<human readable string>"}'
+  content_type: application/json
+  note: >-
+    No `type`/`title`/`status`/`detail` problem-details envelope, no machine-readable error code, and
+    no application/problem+json media type anywhere in the spec.
+  cross_link: errors/playable-problem-types.yml
+rate_limit_signaling:
+  headers:
+  - X-RateLimit-Limit
+  - X-RateLimit-Remaining
+  - Retry-After
+  note: Retry-After is added only once the limit is hit; the other two are on every response.
+  cross_link: rate-limits/playable-rate-limits.yml
+caching:
+  provider_expectation: >-
+    The spec states Playable "expect implementations to cache data where possible and only request
+    data when it's needed", and that clients found not caching "may be subject to rate limiting or
+    have your access revoked". Cache invalidation is client-driven via POST /v1/campaign/{campaign}/clear-cache.
+  http_cache_headers: none documented

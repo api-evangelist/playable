@@ -1,0 +1,29 @@
+generated: '2026-08-12'
+method: searched
+source: https://help.playable.com/en/articles/6969461-api-integration-logs-and-status-codes
+scope: >-
+  Outbound direction only. These are the HTTP status codes Playable records and surfaces in the
+  campaign integration log when it delivers player/registration data to a customer's webhook, ESP,
+  CRM or storage endpoint. They describe the RECEIVING system's response, not errors returned by
+  api.playable.com — those are in errors/playable-problem-types.yml.
+where_visible: Campaign > Activity > integration logs in the Playable platform
+status_codes:
+- {code: 200, class: success, meaning: 'OK — request successful; data transferred as expected'}
+- {code: 201, class: success, meaning: 'Created — resource created successfully'}
+- {code: 202, class: success, meaning: 'Accepted — request accepted for processing'}
+- {code: 400, class: client-error, meaning: 'Bad Request — request contains bad syntax'}
+- {code: 401, class: client-error, meaning: 'Unauthorized — authentication failed or credentials missing'}
+- {code: 403, class: client-error, meaning: 'Forbidden — access denied to the resource'}
+- {code: 404, class: client-error, meaning: 'Not Found — website or page could not be reached'}
+- {code: 409, class: client-error, meaning: 'Conflict — request conflicts with existing data'}
+- {code: 422, class: client-error, meaning: 'Unprocessable Content — invalid data format', example: 'non-UTF-8 characters in an email address'}
+- {code: 500, class: server-error, meaning: 'Internal Server Error — server-side processing failure'}
+- {code: 501, class: server-error, meaning: 'Not Implemented — server does not support the requested functionality'}
+- {code: 503, class: server-error, meaning: 'Service Unavailable — server temporarily unavailable'}
+- {code: 504, class: server-error, meaning: 'Gateway Timeout — server response time exceeded'}
+- {code: 599, class: network, meaning: 'Network Connect Timeout Error — network connection lost'}
+remediation:
+  server_errors: >-
+    Playable's guidance for 5xx is to check with the receiving service provider for system-wide
+    issues, and to consult that provider's own error glossary.
+  retry_policy: not published

@@ -1,0 +1,36 @@
+generated: '2026-08-12'
+method: searched
+source: https://registry.npmjs.org/@playable-marketing/campaign-sdk
+docs: https://sdk.playable.com/guide/introduction.html
+note: >-
+  One first-party client library exists. Registries probed with no first-party Playable package
+  found: PyPI (playable -> 404), RubyGems, Packagist, crates.io, NuGet, Maven Central, pkg.go.dev.
+  npm names that collide but are NOT Playable: `playable` (an HTML5 video player), `@smoud/playable-sdk`
+  and `@playbox-ai/playable-kit` (playable-ad tooling, unrelated vendors). No server-side SDK is
+  published for the REST API at api.playable.com — consumers hand-roll OAuth 2.0 client-credentials.
+packages:
+- language: javascript
+  registry: npm
+  name: "@playable-marketing/campaign-sdk"
+  url: https://www.npmjs.com/package/@playable-marketing/campaign-sdk
+  install: npm install @playable-marketing/campaign-sdk
+  official: true
+  scope: browser campaign SDK (window.sdk + campaign event stream)
+  version: 0.2.0
+  published: '2024-09-25'
+  first_published: '2024-02-05'
+  release_count: 11
+  license: null
+  repository: null
+  covers_rest_api: false
+  note: >-
+    Currency finding: latest release 0.2.0 shipped 2024-09-25 — roughly two years stale as of this
+    pass, still pre-1.0, with no license field, no repository field and no description in the
+    registry metadata. It wraps the browser campaign surface only; it does not wrap the REST API.
+currency:
+  checked: '2026-08-12'
+  latest_release: '2024-09-25'
+  stale: true
+  note: >-
+    The only first-party package predates the current OpenAPI it does not cover. There is no dated
+    changelog on the provider surface to reconcile it against.

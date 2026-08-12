@@ -1,0 +1,42 @@
+generated: '2026-08-12'
+method: searched
+source: https://api.playable.com/openapi.yaml
+docs: https://api.playable.com/
+limit_count: 1
+rate_limits:
+- scope: per-developer-app
+  limit: 3600
+  window: 1h
+  unit: requests
+  burst: null
+  hard_limit: true
+  note: >-
+    Published verbatim in the OpenAPI info.description: "The default rate limiting allows for 3.600
+    API interactions an hour per developer app (not IP)" and "This is a hard limit and cannot be
+    increased." Circumventing it by creating multiple apps and spreading traffic across them is
+    explicitly prohibited. Individual operations may declare a different limit in their own
+    description; none of the 41 operations in the current spec does.
+response_headers:
+- name: X-RateLimit-Limit
+  when: every response
+  meaning: max number of requests allowed in the defined period
+- name: X-RateLimit-Remaining
+  when: every response
+  meaning: requests left before hitting the rate limit
+- name: Retry-After
+  when: only once the limit has been hit
+  meaning: seconds to wait before issuing additional requests
+exhaustion:
+  status_code: null
+  note: >-
+    The throttled status code is NOT published. No 429 (or any other rate-limit status) is declared
+    on any operation in the spec, and the documentation names only the Retry-After header. An agent
+    must infer exhaustion from the presence of Retry-After rather than from a documented status.
+  verified: false
+caching_expectation: >-
+  Playable states it expects implementations to cache where possible and request only when needed,
+  and that clients found abusing the API by not caching "may be subject to rate limiting or have
+  your access revoked."
+x-evidence:
+- {fetched: '2026-08-12', url: 'https://api.playable.com/openapi.yaml', http_status: 200}
+- {fetched: '2026-08-12', url: 'https://api.playable.com/v1/campaigns', http_status: 401, note: 'anonymous request; no X-RateLimit-* header present on the unauthenticated rejection'}

@@ -1,0 +1,60 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Playable API
+  version: 1.0.0
+extends: openapi/playable-api-openapi.yml
+x-generated: '2026-08-12'
+x-method: generated
+x-source: openapi/_original/playable-openapi-original.yml
+x-note: >-
+  Non-destructive enhancements over the spec Playable serves at https://api.playable.com/openapi.yaml.
+  The harvested original is never mutated. These actions add identity and provenance metadata and
+  record the gaps found during enrichment; they do NOT invent operationIds, schemas or responses on
+  the provider's behalf.
+actions:
+- target: $.info
+  update:
+    title: Playable API
+    x-original-title: Swagger with Laravel
+    x-apievangelist-slug: playable
+    x-apievangelist-reviewed: '2026-08-12'
+    x-provider: Playable ApS
+    x-provider-url: https://playable.com/
+    x-api-reference: https://api.playable.com/
+    x-developer-docs: https://help.playable.com/en/articles/10384051-developer
+    x-status-page: https://status.playable.com/
+    x-license-published: false
+- target: $.info
+  update:
+    x-apievangelist-findings:
+      operation_ids: >-
+        None of the 41 operations declares an operationId. Nothing in this pipeline invents them;
+        every derived artifact keys operations by METHOD + path instead. Adding stable operationIds
+        is the single highest-leverage change Playable could make to this contract.
+      components_schemas: >-
+        components.schemas is empty — every request and response body is inlined per operation, so
+        no shape is reusable, referenceable or independently versionable.
+      error_model: >-
+        Errors are {"message": "..."} with no code and no application/problem+json. Only 400/401/403/404
+        are declared; no 5xx and no rate-limit status appear anywhere despite a documented hard limit.
+      rate_limit_status: >-
+        The 3,600/hour limit and the X-RateLimit-* / Retry-After headers are documented in prose in
+        info.description but are not modelled as response headers on any operation.
+      idempotency: >-
+        No idempotency contract, on a write surface that includes activate, resume, copy and
+        send-email-to-winner.
+      security_scheme_name: >-
+        The oauth2 scheme is named "clientCredentials" — the grant type, not the scheme's identity.
+      scope_descriptions: >-
+        All 37 scope descriptions are the placeholder string "Grant right to", so the scope map
+        carries no semantics an agent or a reviewer can act on.
+- target: $.servers
+  update:
+    x-apievangelist-note: >-
+      servers[1] https://api.dev.playable.com is labelled QA. It is declared publicly but no
+      documentation explains how to obtain access to it. Treat as provider-internal.
+- target: $.tags
+  update:
+    x-apievangelist-note: >-
+      Only oauth and campaigns are declared in tags[]; the media and user tags are used on operations
+      but never declared at the document level.

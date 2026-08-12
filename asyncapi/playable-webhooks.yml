@@ -1,0 +1,70 @@
+generated: '2026-08-12'
+method: searched
+source: https://help.playable.com/en/articles/5807069-webhook-integration
+spec_type: none
+asyncapi_published: false
+asyncapi_note: >-
+  No AsyncAPI document is published. /asyncapi.yaml and /asyncapi.json return 404 on playable.com and
+  api.playable.com (403 AccessDenied on the sdk.playable.com CDN origin), there is no event-catalog
+  page, and the github.com/playable organization has no public repositories and no verifiable link
+  to this company. The event surface below is captured as a webhook catalog instead, which is
+  what the provider actually documents. NOTHING here is fabricated into AsyncAPI shape.
+webhooks:
+  direction: outbound
+  configured_where: per campaign, in the platform integrations UI (not via the REST API)
+  entitlement: 'Core and Premium plans ("standard and web-hook integrations"); not on Essentials'
+  transport:
+    method: POST
+    content_types:
+    - application/x-www-form-urlencoded   # labelled "URL encoded" / "Form" in the UI
+    - application/json
+  authentication:
+  - {scheme: oauth2, note: 'token-based; a valid access token is placed in the request header'}
+  - {scheme: bearer, note: 'pre-shared token in the request header'}
+  - {scheme: basic, note: 'Base64-encoded username and password'}
+  triggering:
+    model: >-
+      A single configurable "Event type" per webhook — what happens on the campaign that fires the
+      call. Playable's documented typical choice is the Terms & Conditions field on the registration
+      form, i.e. the webhook fires when a player submits the registration form with consent.
+    published_event_enum: false
+    note: >-
+      The full list of selectable event types is only visible inside the authenticated campaign
+      builder; it is not published in the help center, so no event names are asserted here.
+  payload:
+    schema_published: false
+    field_mapping: >-
+      Fields are mapped manually — the webhook cannot read the receiving database, so the operator
+      binds each Playable field to a target attribute name. There is no fixed payload contract; the
+      body shape is whatever the operator mapped.
+    available_source_data:
+    - registration form fields (e.g. name, email)
+    - campaign data (e.g. campaign name, IP address)
+    - game flow results (e.g. winner / loser status)
+  delivery:
+    retry_policy: not published
+    signing: not published
+    signature_header: null
+    ip_allowlist: not published
+    timeout: not published
+  observability:
+    delivery_log: 'Campaign > Activity, with the receiving system''s HTTP status per attempt'
+    status_codes: errors/playable-integration-status-codes.yml
+  testing:
+    guidance: >-
+      Playable recommends firing the campaign's demo URL and confirming the row lands under
+      Activity > Registration before going live. See sandbox/playable-sandbox.yml.
+related_surfaces:
+  rest_read_side:
+    note: >-
+      The REST API exposes the same data pull-style rather than push-style — GET
+      /v1/campaign/{campaign}/registrations, /email-log, /sms-log and /integrations let a consumer
+      poll what the webhook would have pushed, including which integrations a campaign has wired.
+  browser_events:
+    note: >-
+      Separately, @playable-marketing/campaign-sdk exposes an in-page event stream on window.sdk for
+      client-side campaign events. That is a browser surface, not a server-delivered event.
+    docs: https://sdk.playable.com/guide/introduction.html
+x-evidence:
+- {fetched: '2026-08-12', url: 'https://help.playable.com/en/articles/5807069-webhook-integration', http_status: 200}
+- {fetched: '2026-08-12', url: 'https://help.playable.com/en/articles/6969461-api-integration-logs-and-status-codes', http_status: 200}

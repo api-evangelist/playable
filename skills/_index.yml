@@ -1,0 +1,61 @@
+generated: '2026-08-12'
+method: generated
+source: openapi/playable-api-openapi.yml
+note: >-
+  Playable publishes no AGENTS.md and no skill files of its own — these are API Evangelist packaged
+  operating instructions. The Playable OpenAPI declares NO operationId on any of its 41 operations,
+  so every skill grounds its steps in METHOD + path, verified against the spec. No operation name,
+  parameter or scope below is invented.
+skills:
+- file: playable-pull-campaign-registrations.md
+  name: Pull player registrations from a Playable campaign
+  api: openapi/playable-api-openapi.yml
+  operations:
+  - POST /oauth/token
+  - GET /v1/campaigns
+  - GET /v1/campaign/{campaign}/registrations
+  - GET /v1/campaign/{campaign}/registration/{registration}
+  - GET /v1/campaign/{campaign}/email-log
+  - GET /v1/campaign/{campaign}/sms-log
+- file: playable-manage-campaign-lifecycle.md
+  name: Run a Playable campaign lifecycle
+  api: openapi/playable-api-openapi.yml
+  operations:
+  - POST /oauth/token
+  - GET /v1/campaign-types
+  - GET /v1/campaigns
+  - POST /v1/campaign/copy/{campaign}
+  - POST /v1/campaign/{campaign}
+  - PATCH /v1/campaign/{campaign}/game-settings
+  - POST /v1/campaign/{campaign}/activate
+  - POST /v1/campaign/{campaign}/pause
+  - POST /v1/campaign/{campaign}/resume
+  - POST /v1/campaign/{campaign}/clear-cache
+  - DELETE /v1/campaign/{campaign}
+- file: playable-award-and-notify-winners.md
+  name: Award prizes and notify Playable winners
+  api: openapi/playable-api-openapi.yml
+  operations:
+  - GET /v1/campaign/{campaign}/prizes
+  - GET /v1/campaign/{campaign}/bulk-prizes
+  - PATCH /v1/campaign/{campaign}/bulk-prize/{bulkPrize}
+  - POST /v1/campaign/{campaign}/bulk-prize/{bulkPrize}/item/{bulkPrizeItem}/send/email
+  - GET /v1/campaign/{campaign}/vouchers
+  - DELETE /v1/campaign/voucher
+- file: playable-report-campaign-performance.md
+  name: Report on Playable campaign performance
+  api: openapi/playable-api-openapi.yml
+  operations:
+  - GET /v1/campaign/{campaign}/statistics
+  - GET /v1/campaign/{campaign}/statistics/sessions
+  - GET /v1/campaign/{campaign}/statistics/registrations
+  - GET /v1/campaign/{campaign}/game-data-statistics
+  - GET /v1/campaign/{campaign}/integrations
+  - GET /v1/campaign/{campaign}/sections
+cross_links:
+  conventions: conventions/playable-conventions.yml
+  errors: errors/playable-problem-types.yml
+  rate_limits: rate-limits/playable-rate-limits.yml
+  authentication: authentication/playable-authentication.yml
+  scopes: scopes/playable-scopes.yml
+  sandbox: sandbox/playable-sandbox.yml

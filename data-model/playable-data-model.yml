@@ -1,0 +1,108 @@
+generated: '2026-08-12'
+method: derived
+source: openapi/playable-api-openapi.yml
+note: >-
+  Derived from path structure and inline response schemas. The spec declares ZERO reusable
+  components.schemas — every response body is inlined at the operation — so there are no $ref edges
+  to walk. The graph below is therefore reconstructed from path nesting (the provider's own
+  containment hierarchy), from the `links` object the campaign resource returns, and from the `with`
+  expansion vocabulary. Identifiers are integers; no prefixed/typed id scheme is published.
+identifiers:
+  style: integer
+  prefixes: none
+  note: 'campaign ids are plain integers (e.g. {"id": 123}); campaign TYPES are addressed by alias string'
+entities:
+- name: CampaignType
+  path: /v1/campaign-types
+  addressed_by: alias
+  description: Catalog of the game concepts a campaign can be built from.
+  operations: ['GET /v1/campaign-types', 'GET /v1/campaign-type/{campaignType}']
+- name: Campaign
+  path: /v1/campaign/{campaign}
+  root: true
+  description: >-
+    The aggregate root. Every other resource in the API is reached through a campaign. Fields
+    observed on the collection response include id, name, timezone, type, active, active_from,
+    active_to, live_url, demo_url, created_on, template{enabled,image} and a links object.
+  link_fields: [self, integrations, sections, prizes, gameDataStatistics, bulkPrizes]
+  expansions: [registrations, sessions, is_instant_win, has_data_wiped, integrations, sections, sections.form_fields, bulk_prizes, sections.sessions]
+  operations:
+  - 'GET /v1/campaigns'
+  - 'GET /v1/campaign/{campaign}'
+  - 'POST /v1/campaign/{campaign}'
+  - 'DELETE /v1/campaign/{campaign}'
+  - 'POST /v1/campaign/{campaign}/activate'
+  - 'POST /v1/campaign/{campaign}/pause'
+  - 'POST /v1/campaign/{campaign}/resume'
+  - 'POST /v1/campaign/copy/{campaign}'
+  - 'POST /v1/campaign/{campaign}/clear-cache'
+- name: Section
+  path: /v1/campaign/{campaign}/section/{section}
+  description: A page/step in the campaign flow.
+- name: FormField
+  path: /v1/campaign/{campaign}/section/{section}/form-field/{formField}
+  description: A registration-form field belonging to a section; the zero-party data capture unit.
+- name: GameSettings
+  path: /v1/campaign/{campaign}/game-settings
+  cardinality: singleton per campaign
+  description: The game configuration for the campaign; readable and patchable.
+- name: Prize
+  path: /v1/campaign/{campaign}/prize/{prize}
+  description: An individually configured prize on the campaign.
+- name: BulkPrize
+  path: /v1/campaign/{campaign}/bulk-prize/{bulkPrize}
+  description: A prize pool; patchable, and holds items.
+- name: BulkPrizeItem
+  path: /v1/campaign/{campaign}/bulk-prize/{bulkPrize}/item/{bulkPrizeItem}
+  description: >-
+    An individual award within a bulk prize. Not independently readable — the only operation is
+    POST .../send/email, which emails the winner.
+- name: Voucher
+  path: /v1/campaign/{campaign}/voucher/{voucher}
+  description: Redeemable code issued by the campaign.
+  note: 'Deletion is the odd one out — DELETE /v1/campaign/voucher is NOT nested under a campaign id.'
+- name: Registration
+  path: /v1/campaign/{campaign}/registration/{registration}
+  description: A player submission — the personal-data record; listable, viewable, deletable.
+- name: EmailLog
+  path: /v1/campaign/{campaign}/email-log/{emailLog}
+  description: Record of an email the campaign sent.
+- name: SmsLog
+  path: /v1/campaign/{campaign}/sms-log/{smsLog}
+  description: Record of an SMS the campaign sent.
+- name: Integration
+  path: /v1/campaign/{campaign}/integrations
+  description: The ESP/CRM/storage/webhook connections wired to the campaign. Read-only over the API.
+- name: Statistics
+  path: /v1/campaign/{campaign}/statistics
+  children: [sessions, registrations]
+  description: Aggregated campaign performance; sessions and registrations are separate sub-resources.
+- name: GameDataStatistics
+  path: /v1/campaign/{campaign}/game-data-statistics
+  description: Per-game-type result data. Returns an empty array for unsupported game types.
+- name: Media
+  path: /v1/media/upload
+  description: Account-scoped asset upload; not nested under a campaign.
+- name: LoginToken
+  path: /v1/user/create-login-token
+  description: Mints a user login token — the only user-scoped operation in the API.
+relationships:
+- {from: Campaign, to: CampaignType, kind: belongs_to, via: type}
+- {from: Campaign, to: Section, kind: has_many, via: 'path nesting + links.sections'}
+- {from: Section, to: FormField, kind: has_many, via: path nesting}
+- {from: Campaign, to: GameSettings, kind: has_one, via: path nesting}
+- {from: Campaign, to: Prize, kind: has_many, via: 'path nesting + links.prizes'}
+- {from: Campaign, to: BulkPrize, kind: has_many, via: 'path nesting + links.bulkPrizes'}
+- {from: BulkPrize, to: BulkPrizeItem, kind: has_many, via: path nesting}
+- {from: Campaign, to: Voucher, kind: has_many, via: path nesting}
+- {from: Campaign, to: Registration, kind: has_many, via: path nesting}
+- {from: Campaign, to: EmailLog, kind: has_many, via: path nesting}
+- {from: Campaign, to: SmsLog, kind: has_many, via: path nesting}
+- {from: Campaign, to: Integration, kind: has_many, via: 'path nesting + links.integrations'}
+- {from: Campaign, to: Statistics, kind: has_one, via: path nesting}
+- {from: Campaign, to: GameDataStatistics, kind: has_one, via: 'path nesting + links.gameDataStatistics'}
+- {from: Section, to: Registration, kind: related, via: 'sections.sessions expansion', confidence: medium}
+gaps:
+- 'No components.schemas: every entity shape is inlined per operation, so no schema is reusable or referenceable.'
+- 'No operationId on any operation, so entities cannot be addressed by a stable operation identifier.'
+- 'Write coverage is thin: only Campaign, GameSettings and BulkPrize are mutable; Section, FormField, Prize and Voucher are read-only over the API.'

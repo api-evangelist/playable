@@ -1,0 +1,61 @@
+generated: '2026-08-12'
+method: searched
+source: https://sdk.playable.com/guide/introduction.html
+summary: >-
+  Playable's client-side surface is an embeddable campaign runtime rather than a component library.
+  A campaign is published as a hosted page (live_url / demo_url on the campaign resource) and is
+  placed on a customer property by embed or pop-up; the Campaign SDK is the scripting layer that
+  lets the host page observe and steer the running campaign. Distinct from packages/ — that catalogs
+  the distribution, this catalogs the surface it drives.
+families:
+- family: campaign-sdk
+  name: Playable Campaign SDK
+  kind: browser javascript sdk
+  global: window.sdk
+  docs: https://sdk.playable.com/guide/introduction.html
+  getting_started: https://sdk.playable.com/sdk/getting-started.html
+  loader:
+    npm: '@playable-marketing/campaign-sdk'
+    install: npm install @playable-marketing/campaign-sdk
+    cdn: null
+    cdn_note: >-
+      No CDN/unpkg/jsDelivr loader URL is published in the documentation, and no script-tag snippet
+      is given — only the npm install. A consumer embedding on a plain page has no documented
+      pinned build to reference.
+  model: promise-based; two communication modes — an event stream and a direct window API
+  events:
+  - FormSubmit
+  - FlowPage Changed
+  - Action
+  event_api:
+  - add a listener
+  - listen once
+  - remove a listener
+  async_note: >-
+    An event callback may return suspense(); the runtime awaits all promises inside it before
+    applying the flow logic for the next action.
+  data_surfaces:
+  - Campaign
+  - FlowPages
+  - Replacement Tags
+  access_control: 'context is filtered by the viewing user''s permissions on the platform'
+  prerequisites:
+  - active access to the Playable platform
+  - familiarity with Playable campaign fundamentals
+- family: campaign-embed
+  name: Hosted campaign placements
+  kind: hosted / prebuilt surface
+  variants:
+  - {name: live campaign page, field: live_url, source: 'openapi campaign resource'}
+  - {name: demo campaign page, field: demo_url, source: 'openapi campaign resource'}
+  - {name: pop-up, docs: 'https://help.playable.com/en/collections/3009769-the-pop-up'}
+  - {name: campaign link, docs: 'https://help.playable.com/en/collections/6537561-campaign-link'}
+  - {name: sub-domain hosting, note: 'Core and Premium plans include sub-domain access for campaign URLs'}
+  note: >-
+    Embed/pop-up placement is configured in the campaign builder, not through the REST API; the API
+    exposes the resulting URLs as read-only fields on the campaign resource.
+not_present:
+- web components / custom elements
+- react or vue component packages
+- embedded dashboard / analytics widget for customer apps
+- hosted checkout or form element libraries

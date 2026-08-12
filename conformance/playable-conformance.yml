@@ -1,0 +1,74 @@
+generated: '2026-08-12'
+method: derived
+source:
+- openapi/playable-api-openapi.yml
+- well-known/playable-oauth-authorization-server.json
+- https://playable.com/iso-gdpr-security/
+standards:
+- id: openapi-3.0
+  conforms: true
+  evidence: 'openapi: 3.0.0 served at https://api.playable.com/openapi.yaml, 36 paths / 41 operations'
+- id: oauth2
+  conforms: true
+  evidence: 'components.securitySchemes.clientCredentials type oauth2, clientCredentials flow, 37 scopes'
+- id: oauth2-client-credentials-rfc6749
+  conforms: true
+  evidence: 'POST /oauth/token, Authorization: Bearer {{ACCESS_TOKEN}}'
+- id: rfc8414-authorization-server-metadata
+  conforms: true
+  evidence: 'https://playable.com/.well-known/oauth-authorization-server returns 200 with issuer, authorization_endpoint, token_endpoint, revocation_endpoint'
+  note: Served for the MCP surface on the web property, not for the campaign API host.
+- id: rfc9728-protected-resource-metadata
+  conforms: true
+  evidence: 'https://playable.com/.well-known/oauth-protected-resource returns 200 naming resource + authorization_servers'
+- id: rfc7636-pkce
+  conforms: true
+  evidence: 'code_challenge_methods_supported: [S256]'
+- id: oidc-discovery
+  conforms: false
+  evidence: '/.well-known/openid-configuration 404 on every host'
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: 'error bodies are {"message": "..."}; application/problem+json appears nowhere in the spec'
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: '/.well-known/security.txt 404 on playable.com and api.playable.com'
+- id: rfc8594-sunset-header
+  conforms: false
+  evidence: no Sunset or Deprecation header documented; no deprecated operations in the spec
+- id: idempotency-key
+  conforms: false
+  evidence: no Idempotency-Key header or parameter in any of the 41 operations
+- id: pagination
+  conforms: true
+  evidence: 'page-number pagination with links{first,last,prev,next} and meta{current_page,from,path,per_page,to}'
+- id: rate-limit-headers
+  conforms: partial
+  evidence: 'X-RateLimit-Limit / X-RateLimit-Remaining / Retry-After documented; the draft RateLimit-* (IETF) form is not used and the 429 status is not declared'
+- id: json-api
+  conforms: false
+  evidence: 'data/links/meta envelope resembles JSON:API shape but media type is application/json and no JSON:API semantics (type/id/relationships) are used'
+- id: asyncapi
+  conforms: false
+  evidence: no AsyncAPI document published; the event surface is a configurable outbound webhook only
+- id: mcp
+  conforms: true
+  evidence: 'JSON-RPC MCP endpoint at https://playable.com/wp-json/mcp/mcp-oauth-server responding 401 mcp_unauthorized to tools/list'
+- id: a2a
+  conforms: false
+  evidence: no agent card at /.well-known/agent-card.json or /.well-known/agent.json on any of six hosts
+- id: iso-27001
+  conforms: true
+  evidence: 'ISO 27001:2022 certificate PDF (2025) published; see security/playable-trust-center.yml'
+- id: isae-3000
+  conforms: true
+  evidence: 'ISAE 3000 Type 2 GDPR assurance report (2025) published'
+- id: gdpr
+  conforms: true
+  evidence: 'GDPR compliance statement + DPA at https://playable.com/playable-dpa-v2/'
+- id: soc2
+  conforms: false
+  evidence: not claimed on any published compliance page
+- id: hsts
+  conforms: true
+  evidence: 'strict-transport-security: max-age=31536000; includeSubDomains observed on api.playable.com'

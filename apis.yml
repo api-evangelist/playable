@@ -1,28 +1,197 @@
 aid: playable
 name: Playable
-description: Playable is a company surfaced via the API Evangelist marketing integration graph — named
-  as an integration by 2 members of the programmable-marketing cohort — and added to the network as a
-  stub for full-pipeline profiling.
+description: >-
+  Playable (formerly Leadfamly, Playable ApS, Aarhus Denmark and London UK) is a self-service marketing
+  gamification platform used by brands to build, publish and measure interactive campaigns — spin-the-wheel,
+  advent calendars, quizzes, scratch cards, memory and skill games — across web, email, in-app, in-store and
+  retail-media placements. The platform pairs a campaign builder with zero-party data collection, prize and
+  voucher management, ESP/CRM/storage integrations, webhooks and campaign analytics. Programmatic access is
+  delivered through a public REST API at api.playable.com documented with an OpenAPI 3.0 definition and secured
+  with OAuth 2.0 client-credentials scoped per capability, plus a browser-side campaign SDK published to npm.
+  API access is a Premium-plan entitlement; developer apps and credentials are created under Global settings.
+image: https://playable.com/wp-content/uploads/2022/09/Logo_Playable_wobble.png
 url: https://raw.githubusercontent.com/api-evangelist/playable/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:marketing-integration-graph
-x-tier: stub
-x-tier-reason: harvest
 specificationVersion: '0.20'
 created: '2026-08-12'
 modified: '2026-08-12'
 tags:
 - Company
-apis: []
+- marketing-gamification
+- interactive-marketing
+- campaign-management
+- zero-party-data
+- lead-generation
+- loyalty
+- martech
+- webhooks
+- oauth2
+apis:
+- name: Playable API
+  description: >-
+    Public REST API for the Playable gamification platform. Covers campaign types, campaign lifecycle
+    (list, view, update, copy, delete, activate, pause, resume, clear cache), campaign sections and
+    registration form fields, prizes and bulk prizes, vouchers, player registrations, email and SMS logs,
+    game data statistics, session/registration analytics, game settings, media upload and login-token
+    creation. OAuth 2.0 client-credentials with 37 fine-grained scopes; 3,600 requests per hour per
+    developer app with X-RateLimit-* and Retry-After response headers.
+  humanURL: https://api.playable.com/
+  baseURL: https://api.playable.com
+  tags:
+  - marketing-gamification
+  - campaign-management
+  - zero-party-data
+  - loyalty
+  - martech
+  properties:
+  - type: OpenAPI
+    url: openapi/playable-api-openapi.yml
+  - type: APIReference
+    url: https://api.playable.com/
+  - type: Documentation
+    url: https://help.playable.com/en/articles/10384051-developer
+  - type: GettingStarted
+    url: https://help.playable.com/en/articles/10384051-developer
+  - type: Authentication
+    url: authentication/playable-authentication.yml
+  - type: OAuthScopes
+    url: scopes/playable-scopes.yml
+  - type: Conventions
+    url: conventions/playable-conventions.yml
+  - type: RateLimits
+    url: rate-limits/playable-rate-limits.yml
+  - type: ErrorCatalog
+    url: errors/playable-problem-types.yml
+  - type: DataModel
+    url: data-model/playable-data-model.yml
+  - type: Overlay
+    url: overlays/playable-api-overlay.yaml
+- name: Playable MCP Server
+  description: >-
+    Hosted Model Context Protocol endpoint served from the Playable web property and advertised through
+    RFC 9728 protected-resource metadata at playable.com/.well-known/oauth-protected-resource. Requires
+    OAuth 2.0 authorization-code + PKCE (S256) with the `mcp` scope; an anonymous tools/list call returns
+    401 mcp_unauthorized, so the tool set and input schemas are not enumerable without credentials.
+  humanURL: https://playable.com/
+  baseURL: https://playable.com/wp-json/mcp/mcp-oauth-server
+  tags:
+  - mcp
+  - agent-native
+  - marketing-gamification
+  properties:
+  - type: MCPServer
+    url: mcp/playable-mcp.yml
+  - type: MCPServer
+    url: https://playable.com/wp-json/mcp/mcp-oauth-server
+  - type: ToolCrosswalk
+    url: mcp/playable-tool-crosswalk.yml
+  - type: WellKnown
+    url: well-known/playable-well-known.yml
+- name: Playable Campaign SDK
+  description: >-
+    Browser-side JavaScript SDK (`@playable-marketing/campaign-sdk`) that exposes a promise-based
+    `window.sdk` object plus an event stream so a host page can listen to campaign events and read
+    campaign context filtered by the viewer's permissions. Documented at sdk.playable.com.
+  humanURL: https://sdk.playable.com/guide/introduction.html
+  baseURL: https://sdk.playable.com
+  tags:
+  - javascript
+  - sdk
+  - marketing-gamification
+  properties:
+  - type: Documentation
+    url: https://sdk.playable.com/guide/introduction.html
+  - type: Packages
+    url: packages/playable-packages.yml
+  - type: SDKs
+    url: packages/playable-packages.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: DomainSecurity
+  url: security/playable-domain-security.yml
 - type: Website
   url: https://playable.com/
+- type: DeveloperPortal
+  url: https://api.playable.com/
+- type: Documentation
+  url: https://help.playable.com/en/
+- type: APIReference
+  url: https://api.playable.com/
+- type: GettingStarted
+  url: https://help.playable.com/en/articles/10384051-developer
+- type: Support
+  url: https://playable.com/help-center/
+- type: HelpCenter
+  url: https://help.playable.com/en/
+- type: Blog
+  url: https://playable.com/learn/blog/
+- type: Pricing
+  url: https://playable.com/pricing/
+- type: SignUp
+  url: https://playable.com/demo/
+- type: Login
+  url: https://app.playable.com/
+- type: TermsOfService
+  url: https://playable.com/terms-and-conditions-v2/
+- type: PrivacyPolicy
+  url: https://playable.com/privacy-policy-for-playable-aps/
+- type: StatusPage
+  url: https://status.playable.com/
+- type: Compliance
+  url: https://playable.com/iso-gdpr-security/
+- type: TrustCenter
+  url: security/playable-trust-center.yml
+- type: Plans
+  url: plans/playable-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/playable-rate-limits.yml
+- type: Authentication
+  url: authentication/playable-authentication.yml
+- type: OAuthScopes
+  url: scopes/playable-scopes.yml
+- type: Conventions
+  url: conventions/playable-conventions.yml
+- type: Lifecycle
+  url: lifecycle/playable-lifecycle.yml
+- type: Conformance
+  url: conformance/playable-conformance.yml
+- type: ErrorCatalog
+  url: errors/playable-problem-types.yml
+- type: ErrorCatalog
+  url: errors/playable-integration-status-codes.yml
+- type: Sandbox
+  url: sandbox/playable-sandbox.yml
+- type: DataModel
+  url: data-model/playable-data-model.yml
+- type: Packages
+  url: packages/playable-packages.yml
+- type: SDKs
+  url: packages/playable-packages.yml
+- type: Components
+  url: components/playable-components.yml
+- type: Webhooks
+  url: asyncapi/playable-webhooks.yml
+- type: MCPServer
+  url: mcp/playable-mcp.yml
+- type: WellKnown
+  url: well-known/playable-well-known.yml
+- type: LLMsTxt
+  url: llms/playable-llms.txt
+- type: AgentSkill
+  url: skills/_index.yml
+- type: Overlay
+  url: overlays/playable-api-overlay.yaml
 x-vouched-by:
 - Benchmark Email
 - MailerLite
 x-vouch-count: 2
+x-enrichment:
+  date: '2026-08-12'
+  status: enriched
+  artifacts_added: 30
+  pass: local-v1

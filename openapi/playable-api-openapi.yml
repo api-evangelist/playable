@@ -1,0 +1,3605 @@
+openapi: 3.0.0
+info:
+  title: Swagger with Laravel
+  description: |
+    This documentation aims to provide all the information you need to work with our API.
+
+    ***Rate limiting***
+
+    APIs are bound by rate limiting. The default rate limiting allows for 3.600 API interactions an hour per developer app (not IP).
+    You are **NOT** allowed to attempt by-pass of rate limiting by creating multiple apps and distribute your traffic across these.
+    If an API has a different rate limit it will be described in the description of the API.
+
+    ***Every API response contains 2 extra headers***
+    1. `X-RateLimit-Limit` max number of requests you can do in the defined period.
+    2. `X-RateLimit-Remaining` how many requests you have left before hitting the rate limit.
+
+    ***Required Headers***
+    1. `Authorization` used to provide credentials that authenticate an application.
+    2. `Accept` specifies the response type. Only "application/json" is supported.
+
+    Once you've hit your rate limit the response will also include `Retry-After`. This will be the seconds in which you will have to wait for doing additional API requests.
+
+    ***Throughout***
+    The API is designed to allow 3.600 requests per hour per developer app. This is a hard limit and cannot be increased.
+
+    ***Caching***
+    Playable *expect* implementations to be mindful of not overloading the API with requests.
+    Playable **expect** implementations to cache data where possible and only request data when it's needed.
+    If you're found to be abusing the API by not caching data, you may be subject to rate limiting or have your access revoked.
+  version: 1.0.0
+paths:
+  /oauth/token:
+    post:
+      tags:
+        - oauth
+      summary: Authentication
+      description: |
+        ***Authenticating requests***
+
+        To authenticate requests, include an **`Authorization`** header with the value **`"Bearer {{ACCESS_TOKEN}}"`**.
+
+        All authenticated endpoints are marked with a `requires authentication` badge in the documentation below.
+
+        You can create your own app to gain API access under __Global settings__ / __Developer apps__.
+
+        * campaigns.list
+        * campaigns.view
+        * campaigns.pause
+        * campaigns.resume
+        * campaigns.integrations.list
+        * campaigns.game-data-statistics
+        * campaigns.sections.list
+        * campaigns.sections.view
+        * campaigns.sections.form-fields.list
+        * campaigns.sections.form-fields.view
+        * campaigns.prizes.list
+        * campaigns.prizes.view
+        * campaigns.bulk-prizes.list
+        * campaigns.bulk-prizes.view
+        * campaigns.bulk-prizes-items.send-email
+        * campaigns.email-log.list
+        * campaigns.email-log.view
+        * campaigns.sms-log.list
+        * campaigns.sms-log.view
+        * campaigns.registrations.list
+        * campaigns.registrations.view
+        * campaigns.registrations.delete
+        * campaigns.voucher.list
+        * campaigns.voucher.view
+        * campaigns.voucher.delete
+        * campaigns.types.list
+        * campaigns.types.view
+        * campaigns.copy
+        * campaigns.clear-cache
+        * media.upload
+        * user.create-login-token
+
+        ***Issue Token***
+
+        This API issues a new access token. List over available scopes can be seen under the authentication introduction.
+        Access tokens have a life-span of 1 hour. Once expired you will have to generate a new access token.
+        We expect implementations to re-use access tokens generated for as long as they're active.
+
+        Applications found to be generating new access tokens when existing ones haven't expired may be subject to rate limiting.
+        Scope can be declared singular as string or multiple as array within a single request.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - grant_type
+                - client_id
+                - client_secret
+              properties:
+                grant_type:
+                  description: The type of grant being requested
+                  type: string
+                  example: client_credentials
+                client_id:
+                  description: The client ID issued to the client
+                  type: string
+                  example: your-client-id
+                client_secret:
+                  description: The client secret issued to the client
+                  type: string
+                  example: your-client-secret
+                scope:
+                  description: Scopes allowed to interact with
+                  type: array
+                  items:
+                    type: string
+                    enum:
+                      - campaigns.list
+                      - campaigns.view
+                      - campaigns.pause
+                      - campaigns.resume
+                      - campaigns.integrations.list
+                      - campaigns.game-data-statistics
+                      - campaigns.sections.list
+                      - campaigns.sections.view
+                      - campaigns.sections.form-fields.list
+                      - campaigns.sections.form-fields.view
+                      - campaigns.prizes.list
+                      - campaigns.prizes.view
+                      - campaigns.bulk-prizes.list
+                      - campaigns.bulk-prizes.view
+                      - campaigns.bulk-prizes-items.send-email
+                      - campaigns.email-log.list
+                      - campaigns.email-log.view
+                      - campaigns.sms-log.list
+                      - campaigns.sms-log.view
+                      - campaigns.registrations.list
+                      - campaigns.registrations.view
+                      - campaigns.registrations.delete
+                      - campaigns.voucher.list
+                      - campaigns.voucher.view
+                      - campaigns.voucher.delete
+                      - campaigns.types.list
+                      - campaigns.types.view
+                      - campaigns.copy
+                      - campaigns.clear-cache
+                      - media.upload
+                      - user.create-login-token
+                  example:
+                    - campaigns.list
+                    - campaigns.view
+                    - campaigns.pause
+                    - campaigns.resume
+                    - campaigns.integrations.list
+                    - campaigns.game-data-statistics
+                    - campaigns.sections.list
+                    - campaigns.sections.view
+                    - campaigns.sections.form-fields.list
+                    - campaigns.sections.form-fields.view
+                    - campaigns.prizes.list
+                    - campaigns.prizes.view
+                    - campaigns.bulk-prizes.list
+                    - campaigns.bulk-prizes.view
+                    - campaigns.bulk-prizes-items.send-email
+                    - campaigns.email-log.list
+                    - campaigns.email-log.view
+                    - campaigns.sms-log.list
+                    - campaigns.sms-log.view
+                    - campaigns.registrations.list
+                    - campaigns.registrations.view
+                    - campaigns.registrations.delete
+                    - campaigns.voucher.list
+                    - campaigns.voucher.view
+                    - campaigns.voucher.delete
+                    - campaigns.types.list
+                    - campaigns.types.view
+                    - campaigns.copy
+                    - campaigns.clear-cache
+                    - media.upload
+                    - user.create-login-token
+              type: object
+      responses:
+        '200':
+          description: Issue token to api
+          content:
+            application/json:
+              schema:
+                properties:
+                  token_type:
+                    type: string
+                    example: token_type
+                  expires_in:
+                    type: integer
+                    example: '3600'
+                  access_token:
+                    type: string
+                    example: token
+                type: object
+        '400':
+          description: Invalid request
+        '401':
+          description: |
+            Unauthorized.
+
+            Possible reasons:
+            Token has expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 'message": "Unauthenticated.'
+  /v1/campaign-types:
+    get:
+      tags:
+        - campaigns
+      summary: Campaign types
+      description: |
+        List all campaign types
+        This API lists all campaign types in the system.
+
+        Requires scope:
+
+        `campaigns.types.list`
+      security:
+        - clientCredentials:
+            - campaigns.types.list
+      parameters:
+        - name: filter_category
+          in: query
+          description: 'Filter for campaign type category. Available options are: luck, skill, knowledge.'
+          required: false
+          schema:
+            type: string
+            enum:
+              - luck
+              - skill
+              - knowledge
+      responses:
+        '200':
+          description: Lists all campaign types available in the system
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                          example: Quiz
+                        alias:
+                          type: string
+                          example: quiz
+                        variation:
+                          type: string
+                          example: GAME
+                        description:
+                          type: string
+                        category:
+                          type: string
+                          example: Knowledge games
+                      type: object
+                  links:
+                    properties:
+                      self:
+                        type: string
+                        example: 'https://api.playable.com/v1/campaigns-types'
+                    type: object
+        '401':
+          description: |
+            Unauthorized.
+
+            Possible reasons:
+            Token has expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 'message": "Unauthenticated.'
+  '/v1/campaign-type/{campaignType}':
+    get:
+      tags:
+        - campaigns
+      summary: |
+        This API responds with a single campaign type resource.
+
+        Requires scope:
+
+        `campaigns.types.view`
+      security:
+        - clientCredentials:
+            - campaigns.types.view
+      parameters:
+        - name: campaignType
+          in: path
+          description: campaignType id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Retrieve a single campaign type by id
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    properties:
+                      id:
+                        type: integer
+                      name:
+                        type: string
+                        example: Quiz
+                      alias:
+                        type: string
+                        example: quiz
+                      variation:
+                        type: string
+                        example: GAME
+                      description:
+                        type: string
+                      category:
+                        type: string
+                        example: Knowledge games
+                    type: object
+                type: object
+        '401':
+          description: |
+            Unauthorized.
+
+            Possible reasons:
+            Token has expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 'message": "Unauthenticated.'
+        '403':
+          description: Unable to locate campaign type
+  /v1/campaigns:
+    get:
+      tags:
+        - campaigns
+      summary: Campaigns list
+      description: |
+        This API lists all campaigns.
+
+        Requires scope:
+
+        `campaigns.list`
+      security:
+        - clientCredentials:
+            - campaigns.list
+      parameters:
+        - name: sort
+          in: query
+          description: |
+            Comma separated list which allows for multi-sorting.
+            Available fields are: name, created_on.
+            Available options are: asc, desc.
+          required: false
+          schema:
+            type: string
+        - name: filter_template
+          in: query
+          description: Filter for campaign templates.
+          required: false
+          schema:
+            type: string
+            enum:
+              - 0
+              - 1
+        - name: filter_name
+          in: query
+          description: Filter for specific campaign by name.
+          required: false
+          schema:
+            type: string
+        - name: filter_type
+          in: query
+          description: Filter for specific campaign type by alias.
+          required: false
+          schema:
+            type: string
+        - name: filter_display
+          in: query
+          description: Filter for active or inactive campaigns.
+          required: false
+          schema:
+            type: string
+            enum:
+              - active
+              - inactive
+        - name: with
+          in: query
+          required: false
+          description: |
+            Comma separated list of extra fields to include about the campaigns.
+            Available options are:
+            registrations, sessions, is_instant_win, has_data_wiped, integrations, sections,
+            sections.form_fields, bulk_prizes & sections.sessions.
+          schema:
+            type: array
+            items:
+              type: string
+              example: ''
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lists all campaigns available in the system
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                        timezone:
+                          type: string
+                          example: Europe/Copenhagen
+                          description: 'Available timezones: [link](https://www.php.net/manual/en/timezones.php)'
+                        type:
+                          type: string
+                        active:
+                          type: boolean
+                        active_from:
+                          type: string
+                          format: date-time
+                        active_to:
+                          type: string
+                          format: date-time
+                        live_url:
+                          type: string
+                        demo_url:
+                          type: string
+                        created_on:
+                          type: string
+                          format: date-time
+                        template:
+                          properties:
+                            enabled:
+                              type: boolean
+                            image:
+                              type: string
+                          type: object
+                        links:
+                          properties:
+                            self:
+                              type: string
+                            integrations:
+                              type: string
+                            sections:
+                              type: string
+                            prizes:
+                              type: string
+                            gameDataStatistics:
+                              type: string
+                            bulkPrizes:
+                              type: string
+                          type: object
+                      type: object
+                  links:
+                    items:
+                      title: base links
+                      properties:
+                        first:
+                          type: string
+                          example: 'https://api.playable.com/v1/route?page=1'
+                        last:
+                          type: string
+                          example: 'https://api.playable.com/v1/route?page=14'
+                        prev:
+                          type: string
+                          example: 'https://api.playable.com/v1/route?page=13'
+                        next:
+                          type: string
+                          example: 'https://api.playable.com/v1/route?page=2'
+                      type: object
+                  meta:
+                    items:
+                      title: base meta
+                      properties:
+                        current_page:
+                          type: integer
+                        from:
+                          type: integer
+                        path:
+                          type: string
+                        per_page:
+                          type: integer
+                        to:
+                          type: integer
+                      type: object
+        '401':
+          description: |
+            Unauthorized.
+
+            Possible reasons:
+            Token has expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 'message": "Unauthenticated.'
+  '/v1/campaign/{campaign}':
+    get:
+      tags:
+        - campaigns
+      summary: Show a single campaign
+      description: |
+        This API responds with a single campaign.
+
+        Requires scope:
+
+        `campaigns.view`
+      security:
+        - clientCredentials:
+            - campaigns.view
+      parameters:
+        - name: campaign
+          in: path
+          description: Campaign id
+          required: true
+          schema:
+            type: integer
+        - name: with
+          in: query
+          description: Comma separated list of extra fields to include about the campaigns.
+          required: false
+          schema:
+            type: string
+            enum:
+              - registrations
+              - sessions
+              - is_instant_win
+              - has_data_wiped
+              - integrations
+              - sections
+              - sections.form_fields
+              - bulk_prizes
+              - sections.sessions
+      responses:
+        '200':
+          description: Show a single campaign
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    properties:
+                      id:
+                        type: integer
+                      name:
+                        type: string
+                      timezone:
+                        type: string
+                        example: Europe/Copenhagen
+                        description: 'Available timezones: [link](https://www.php.net/manual/en/timezones.php)'
+                      type:
+                        type: string
+                      active:
+                        type: boolean
+                      active_from:
+                        type: string
+                        format: date-time
+                      active_to:
+                        type: string
+                        format: date-time
+                      live_url:
+                        type: string
+                      demo_url:
+                        type: string
+                      created_on:
+                        type: string
+                        format: date-time
+                      template:
+                        properties:
+                          enabled:
+                            type: boolean
+                          image:
+                            type: string
+                        type: object
+                      links:
+                        properties:
+                          self:
+                            type: string
+                          integrations:
+                            type: string
+                          sections:
+                            type: string
+                          prizes:
+                            type: string
+                          gameDataStatistics:
+                            type: string
+                          bulkPrizes:
+                            type: string
+                        type: object
+                    type: object
+        '401':
+          description: |
+            Unauthorized.
+
+            Possible reasons:
+            Token has expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 'message": "Unauthenticated.'
+    post:
+      tags:
+        - campaigns
+      summary: Update Campaign
+      description: |
+        This API modifies and responds with an HTTP 204 - No Content. 
+
+        Notice! minutes & seconds for active_from/to has to be 0.
+
+        Requires scope:
+
+        `campaigns.modify`
+      security:
+        - clientCredentials:
+            - campaigns.modify
+      parameters:
+        - name: campaign
+          in: path
+          description: Campaign id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: |
+          name: The new name of the campaign.
+          template_enabled: If the campaign should be a template. Either 0 or 1.
+          template_image: Absolute path to the campaign template image.
+          active_from: When the campaign should be active from. Date format: ISO-8601. Example: 2021-01-01T08:00:00+00:00
+          active_to: When the campaign should end. Date format: ISO-8601. Example: 2021-01-01T08:00:00+00:00
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                template_enabled:
+                  type: integer
+                template_image:
+                  type: string
+                active_from:
+                  type: string
+                  format: datetime
+                active_to:
+                  type: string
+                  format: datetime
+              required:
+                - name
+      responses:
+        '204':
+          description: ''
+        '401':
+          description: |
+            Unauthorized.
+
+            Possible reasons:
+            Token has expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 'message": "Unauthenticated.'
+    delete:
+      tags:
+        - campaigns
+      summary: Delete Campaign
+      description: |
+        This API delete a campaign.
+
+        Requires scope:
+
+        `campaigns.delete`
+      security:
+        - clientCredentials:
+            - campaigns.delete
+      parameters:
+        - name: campaign
+          in: path
+          description: Campaign id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: ''
+        '401':
+          description: |
+            Unauthorized.
+
+            Possible reasons:
+            Token has expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 'message": "Unauthenticated.'
+  '/v1/campaign/{campaign}/activate':
+    post:
+      tags:
+        - campaigns
+      summary: Activate Campaign
+      description: |
+        This API activates and responds with a single campaign resource.
+        Notice! active_to cannot be further than the current subscription period & minutes/seconds for active_from/to has to be 0.
+
+        Requires scope: 
+
+        `campaigns.activate`
+      security:
+        - clientCredentials:
+            - campaigns.activate
+      parameters:
+        - name: campaign
+          in: path
+          description: Campaign id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: |
+          active_from: When the campaign should be active from. Date format: ISO-8601. Example: 2021-01-01T08:00:00+00:00
+          active_to: When the campaign should end. Date format: ISO-8601. Example: 2021-01-01T08:00:00+00:00
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                active_from:
+                  type: string
+                  format: datetime
+                active_to:
+                  type: string
+                  format: datetime
+              required:
+                - active_from
+                - active_to
+      responses:
+        '204':
+          description: ''
+        '401':
+          description: |
+            Unauthorized.
+
+            Possible reasons:
+            Token has expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 'message": "Unauthenticated.'
+  '/v1/campaign/{campaign}/pause':
+    post:
+      tags:
+        - campaigns
+      summary: Pause Campaign
+      description: |
+        This API pauses a campaign so that it is no longer active.
+
+        This specific API has a rate limit of 1 call every minute.
+
+        Requires scope:
+
+        `campaigns.pause`
+      security:
+        - clientCredentials:
+            - campaigns.pause
+      parameters:
+        - name: campaign
+          in: path
+          description: Campaign id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: ''
+        '401':
+          description: |
+            Unauthorized.
+
+            Possible reasons:
+            Token has expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 'message": "Unauthenticated.'
+  '/v1/campaign/{campaign}/resume':
+    post:
+      tags:
+        - campaigns
+      summary: Resume campaign
+      description: |
+        This API resumes a paused campaign so that it's active once more.
+
+        This specific API has a rate limit of 1 call every minute.
+
+        Requires scope:
+        `campaigns.resume`
+      security:
+        - clientCredentials:
+            - campaigns.resume
+      parameters:
+        - name: campaign
+          in: path
+          description: Campaign id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: ''
+        '401':
+          description: |
+            Unauthorized.
+
+            Possible reasons:
+            Token has expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 'message": "Unauthenticated.'
+  '/v1/campaign/copy/{campaign}':
+    post:
+      tags:
+        - campaigns
+      summary: Campaign copy
+      description: |
+        This API copies and responds with the copy of a campaign.
+
+        This specific API has a rate limit of 10 calls every minute.
+
+        Requires scope:
+
+        `campaigns.copy`
+      security:
+        - clientCredentials:
+            - campaigns.copy
+      requestBody:
+        description: |
+          name: The name of the new campaign
+          include_bulk_prizes: Should bulk prizes be copied over as well? 
+          Default: false. Important: Only unlimited bulk prizes are copied over.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                include_bulk_prizes:
+                  type: boolean
+              required:
+                - name
+                - include_bulk_prizes
+      parameters:
+        - name: campaign
+          in: path
+          description: Campaign id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    properties:
+                      id:
+                        type: integer
+                      name:
+                        type: string
+                      timezone:
+                        type: string
+                        example: Europe/Copenhagen
+                        description: 'Available timezones: [link](https://www.php.net/manual/en/timezones.php)'
+                      type:
+                        type: string
+                      active:
+                        type: boolean
+                      active_from:
+                        type: string
+                        format: date-time
+                      active_to:
+                        type: string
+                        format: date-time
+                      live_url:
+                        type: string
+                      demo_url:
+                        type: string
+                      created_on:
+                        type: string
+                        format: date-time
+                      template:
+                        properties:
+                          enabled:
+                            type: boolean
+                          image:
+                            type: string
+                        type: object
+                      links:
+                        properties:
+                          self:
+                            type: string
+                          integrations:
+                            type: string
+                          sections:
+                            type: string
+                          prizes:
+                            type: string
+                          gameDataStatistics:
+                            type: string
+                          bulkPrizes:
+                            type: string
+                        type: object
+                    type: object
+        '401':
+          description: |
+            Unauthorized.
+
+            Possible reasons:
+            Token has expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 'message": "Unauthenticated.'
+  '/v1/campaign/{campaign}/vouchers':
+    get:
+      tags:
+        - campaigns
+      summary: Campaign vouchers
+      description: |
+        List all campaign vouchers.
+        This API lists all vouchers associated to the campaign.
+
+        Requires scope:
+
+        `campaigns.voucher.list`
+      security:
+        - clientCredentials:
+            - campaigns.voucher.list
+      parameters:
+        - name: campaign
+          in: path
+          description: Campaign id
+          required: true
+          schema:
+            type: integer
+        - name: with
+          in: query
+          description: |
+            Comma separated list of extra fields to include about the vouchers.
+          required: false
+          schema:
+            type: string
+            enum:
+              - registration
+              - prize
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lists all campaign vouchers available in the system
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          type: integer
+                        seen:
+                          type: boolean
+                        seen_on:
+                          type: string
+                          format: datetime
+                        used:
+                          type: boolean
+                        used_on:
+                          type: string
+                          format: datetime
+                        created_on:
+                          type: string
+                          format: datetime
+                      type: object
+                  self:
+                    type: string
+                  links:
+                    items:
+                      title: base links
+                      properties:
+                        first:
+                          type: string
+                          example: 'https://api.playable.com/v1/route?page=1'
+                        last:
+                          type: string
+                          example: 'https://api.playable.com/v1/route?page=14'
+                        prev:
+                          type: string
+                          example: 'https://api.playable.com/v1/route?page=13'
+                        next:
+                          type: string
+                          example: 'https://api.playable.com/v1/route?page=2'
+                      type: object
+                  meta:
+                    items:
+                      title: base meta
+                      properties:
+                        current_page:
+                          type: integer
+                        from:
+                          type: integer
+                        path:
+                          type: string
+                        per_page:
+                          type: integer
+                        to:
+                          type: integer
+                      type: object
+        '401':
+          description: |
+            Unauthorized.
+
+            Possible reasons:
+            Token has expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 'message": "Unauthenticated.'
+  '/v1/campaign/{campaign}/voucher/{voucher}':
+    get:
+      tags:
+        - campaigns
+      summary: Campaign voucher
+      description: |
+        This API return a single campaign voucher.
+
+        Requires scope:
+
+        `campaigns.voucher.view`
+      security:
+        - clientCredentials:
+            - campaigns.voucher.view
+      parameters:
+        - name: campaign
+          in: path
+          description: Campaign id
+          required: true
+          schema:
+            type: integer
+        - name: voucher
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: with
+          in: query
+          description: |
+            Comma separated list of extra fields to include about the voucher.
+          required: false
+          schema:
+            type: string
+            enum:
+              - registration
+              - prize
+      responses:
+        '200':
+          description: Lists a single campaign voucher
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    properties:
+                      id:
+                        type: integer
+                      seen:
+                        type: boolean
+                      seen_on:
+                        type: string
+                        format: datetime
+                      used:
+                        type: boolean
+                      used_on:
+                        type: string
+                        format: datetime
+                      created_on:
+                        type: string
+                        format: datetime
+                    type: object
+        '401':
+          description: |
+            Unauthorized.
+
+            Possible reasons:
+            Token has expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 'message": "Unauthenticated.'
+  /v1/campaign/voucher:
+    delete:
+      tags:
+        - campaigns
+      summary: Delete Campaign vouchers
+      description: |
+        Delete campaign vouchers.
+        This API deletes campaign vouchers in the system.
+
+        Requires scope:
+
+        `campaigns.voucher.delete`
+      security:
+        - clientCredentials:
+            - campaigns.voucher.delete
+      requestBody:
+        description: |
+          Require an array of integer in query ex. ?vouchers[]=1&vouchers[]=2&vouchers[]=3 or in a body like ex. {"vouchers":[1,2]}
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                vouchers:
+                  type: array
+                  items:
+                    type: integer
+                  minItems: 1
+                  maxItems: 1000
+              required:
+                - vouchers
+      responses:
+        '204':
+          description: ''
+        '401':
+          description: |
+            Unauthorized.
+
+            Possible reasons:
+            Token has expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 'message": "Unauthenticated.'
+  '/v1/campaign/{campaign}/integrations':
+    get:
+      tags:
+        - campaigns
+      summary: Campaign Integrations
+      description: |
+        This API list integrations associated with a campaign.
+
+        Requires scope:
+
+        `campaigns.integrations.list`
+      security:
+        - clientCredentials:
+            - campaigns.integrations.list
+      parameters:
+        - name: campaign
+          in: path
+          description: Campaign id
+          required: true
+          schema:
+            type: integer
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lists all integrations available with a campaign
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                        alias:
+                          type: string
+                        description:
+                          type: string
+                      type: object
+                  links:
+                    items:
+                      title: base links
+                      properties:
+                        first:
+                          type: string
+                          example: 'https://api.playable.com/v1/route?page=1'
+                        last:
+                          type: string
+                          example: 'https://api.playable.com/v1/route?page=14'
+                        prev:
+                          type: string
+                          example: 'https://api.playable.com/v1/route?page=13'
+                        next:
+                          type: string
+                          example: 'https://api.playable.com/v1/route?page=2'
+                      type: object
+                  meta:
+                    items:
+                      title: base meta
+                      properties:
+                        current_page:
+                          type: integer
+                        from:
+                          type: integer
+                        path:
+                          type: string
+                        per_page:
+                          type: integer
+                        to:
+                          type: integer
+                      type: object
+        '401':
+          description: |
+            Unauthorized.
+
+            Possible reasons:
+            Token has expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 'message": "Unauthenticated.'
+  '/v1/campaign/{campaign}/game-data-statistics':
+    get:
+      tags:
+        - campaigns
+      summary: Campaign game data statistic
+      description: |
+        This API fetches latest game data statistics.
+
+        This specific API has a rate limit of 1 call every minute.
+
+        Requires scope:
+
+        `campaigns.game-data-statistics`
+      security:
+        - clientCredentials:
+            - campaigns.game-data-statistics
+      parameters:
+        - name: campaign
+          in: path
+          description: Campaign id
+          required: true
+          schema:
+            type: integer
+        - name: exclude-ghost
+          in: query
+          description: 0/1 for whether or not to exclude ghost users. Default value is 0.
+          required: false
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  metric:
+                    type: string
+                  metric_id:
+                    type: string
+                  distribution:
+                    properties:
+                      id:
+                        type: string
+                      label:
+                        type: string
+                      count:
+                        type: number
+                        format: float
+                      percentage:
+                        type: number
+                        format: float
+                  total:
+                    type: integer
+        '401':
+          description: |
+            Unauthorized.
+
+            Possible reasons:
+            Token has expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 'message": "Unauthenticated.'
+        '404':
+          description: |
+            If it's not a supported game, it'll return an empty array.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {}
+                example: []
+  '/v1/campaign/{campaign}/sections':
+    get:
+      tags:
+        - campaigns
+      summary: Campaign Sections
+      description: |
+        This API lists sections associated with a campaign.
+
+        Requires scope:
+
+        `campaigns.sections.list`
+      security:
+        - clientCredentials:
+            - campaigns.sections.list
+      parameters:
+        - name: campaign
+          in: path
+          description: Campaign id
+          required: true
+          schema:
+            type: integer
+        - name: with
+          in: query
+          description: Comma separated list of extra fields to include about the sections.
+          required: false
+          schema:
+            type: string
+            enum:
+              - sessions
+              - form_fields
+        - name: filter_area
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - flow
+              - popover
+        - name: filter_has_addon
+          in: query
+          description: Return sections only with the given addon.
+          required: false
+          schema:
+            type: string
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          type: integer
+                        title:
+                          type: string
+                        global:
+                          type: boolean
+                        area:
+                          type: string
+                        unique_addons:
+                          type: string
+                        created_on:
+                          type: string
+                          format: datetime
+                        links:
+                          properties:
+                            form_fields:
+                              type: string
+                      type: object
+                  links:
+                    items:
+                      title: base links
+                      properties:
+                        first:
+                          type: string
+                          example: 'https://api.playable.com/v1/route?page=1'
+                        last:
+                          type: string
+                          example: 'https://api.playable.com/v1/route?page=14'
+                        prev:
+                          type: string
+                          example: 'https://api.playable.com/v1/route?page=13'
+                        next:
+                          type: string
+                          example: 'https://api.playable.com/v1/route?page=2'
+                      type: object
+                  meta:
+                    items:
+                      title: base meta
+                      properties:
+                        current_page:
+                          type: integer
+                        from:
+                          type: integer
+                        path:
+                          type: string
+                        per_page:
+                          type: integer
+                        to:
+                          type: integer
+                      type: object
+        '401':
+          description: |
+            Unauthorized.
+
+            Possible reasons:
+            Token has expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 'message": "Unauthenticated.'
+  '/v1/campaign/{campaign}/section/{section}':
+    get:
+      tags:
+        - campaigns
+      summary: Campaign Section
+      description: |
+        This API responds with a single campaign section resource.
+
+        Requires scope:
+
+        `campaigns.sections.view`
+      security:
+        - clientCredentials:
+            - campaigns.sections.view
+      parameters:
+        - name: campaign
+          in: path
+          description: Campaign id
+          required: true
+          schema:
+            type: integer
+        - name: section
+          in: path
+          description: Section id
+          required: true
+          schema:
+            type: integer
+        - name: with
+          in: query
+          description: Comma separated list of extra fields to include about the section.
+          required: false
+          schema:
+            type: string
+            enum:
+              - sessions
+              - form_fields
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    properties:
+                      id:
+                        type: integer
+                      title:
+                        type: string
+                      global:
+                        type: boolean
+                      area:
+                        type: string
+                      unique_addons:
+                        type: string
+                      created_on:
+                        type: string
+                        format: datetime
+                      links:
+                        properties:
+                          form_fields:
+                            type: string
+                    type: object
+                type: object
+        '401':
+          description: |
+            Unauthorized.
+
+            Possible reasons:
+            Token has expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 'message": "Unauthenticated.'
+  '/v1/campaign/{campaign}/section/{section}/form-field/{formField}':
+    get:
+      tags:
+        - campaigns
+      summary: Campaign Section Form Field
+      description: |
+        This API responds with a single campaign section form field resource.
+
+        Requires scope:
+
+        `campaigns.sections.form-fields.view`
+      security:
+        - clientCredentials:
+            - campaigns.sections.form-fields.view
+      parameters:
+        - name: campaign
+          in: path
+          description: Campaign id
+          required: true
+          schema:
+            type: integer
+        - name: section
+          in: path
+          description: Section id
+          required: true
+          schema:
+            type: integer
+        - name: formField
+          in: path
+          description: formField id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    properties:
+                      id:
+                        type: integer
+                      name:
+                        type: string
+                      type:
+                        type: string
+                      default_value:
+                        type: string
+                      required:
+                        type: boolean
+                      created_on:
+                        type: string
+                        format: datetime
+                    type: object
+        '401':
+          description: |
+            Unauthorized.
+
+            Possible reasons:
+            Token has expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 'message": "Unauthenticated.'
+  '/v1/campaign/{campaign}/section/{section}/form-fields':
+    get:
+      tags:
+        - campaigns
+      summary: Campaign Section Form Fields
+      description: |
+        This API lists all form fields associated with a section.
+
+        Requires scope:
+
+        `campaigns.sections.form-fields.list`
+      security:
+        - clientCredentials:
+            - campaigns.sections.form-fields.list
+      parameters:
+        - name: campaign
+          in: path
+          description: Campaign id
+          required: true
+          schema:
+            type: integer
+        - name: section
+          in: path
+          description: Section id
+          required: true
+          schema:
+            type: integer
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                        type:
+                          type: string
+                        default_value:
+                          type: string
+                        required:
+                          type: boolean
+                        created_on:
+                          type: string
+                          format: datetime
+                      type: object
+                  links:
+                    items:
+                      title: base links
+                      properties:
+                        first:
+                          type: string
+                          example: 'https://api.playable.com/v1/route?page=1'
+                        last:
+                          type: string
+                          example: 'https://api.playable.com/v1/route?page=14'
+                        prev:
+                          type: string
+                          example: 'https://api.playable.com/v1/route?page=13'
+                        next:
+                          type: string
+                          example: 'https://api.playable.com/v1/route?page=2'
+                      type: object
+                  meta:
+                    items:
+                      title: base meta
+                      properties:
+                        current_page:
+                          type: integer
+                        from:
+                          type: integer
+                        path:
+                          type: string
+                        per_page:
+                          type: integer
+                        to:
+                          type: integer
+                      type: object
+        '401':
+          description: |
+            Unauthorized.
+
+            Possible reasons:
+            Token has expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 'message": "Unauthenticated.'
+  '/v1/campaign/{campaign}/bulk-prizes':
+    get:
+      tags:
+        - campaigns
+      summary: Campaign Bulk Prizes
+      description: |
+        This API list bulk prizes associated with a campaign.
+
+        Requires scope:
+
+        `campaigns.bulk-prizes.list`
+      security:
+        - clientCredentials:
+            - campaigns.bulk-prizes.list
+      parameters:
+        - name: campaign
+          in: path
+          description: Campaign id
+          required: true
+          schema:
+            type: integer
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                        description:
+                          type: string
+                        type:
+                          type: string
+                        display_criteria:
+                          type: integer
+                        is_instantwin:
+                          type: boolean
+                        locked_to_fields:
+                          type: array
+                          items:
+                            type: string
+                        date_range:
+                          type: string
+                          format: date
+                        time_range:
+                          type: string
+                          format: time
+                        esp_identifier:
+                          type: string
+                        message:
+                          type: string
+                        total_prizes:
+                          type: integer
+                        winners:
+                          type: integer
+                        created_on:
+                          type: string
+                          format: datetime
+                      type: object
+                  links:
+                    items:
+                      title: base links
+                      properties:
+                        first:
+                          type: string
+                          example: 'https://api.playable.com/v1/route?page=1'
+                        last:
+                          type: string
+                          example: 'https://api.playable.com/v1/route?page=14'
+                        prev:
+                          type: string
+                          example: 'https://api.playable.com/v1/route?page=13'
+                        next:
+                          type: string
+                          example: 'https://api.playable.com/v1/route?page=2'
+                      type: object
+                  meta:
+                    items:
+                      title: base meta
+                      properties:
+                        current_page:
+                          type: integer
+                        from:
+                          type: integer
+                        path:
+                          type: string
+                        per_page:
+                          type: integer
+                        to:
+                          type: integer
+                      type: object
+        '401':
+          description: |
+            Unauthorized.
+
+            Possible reasons:
+            Token has expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 'message": "Unauthenticated.'
+  '/v1/campaign/{campaign}/bulk-prize/{bulkPrize}':
+    get:
+      tags:
+        - campaigns
+      summary: Get a single campaign bulk prize resource
+      description: |
+        This API responds with a single campaign bulk prize resource.
+
+        Requires scope:
+
+        `campaigns.bulk-prizes.view`
+      security:
+        - clientCredentials:
+            - campaigns.bulk-prizes.view
+      parameters:
+        - name: campaign
+          in: path
+          description: Campaign id
+          required: true
+          schema:
+            type: integer
+        - name: bulkPrize
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    properties:
+                      id:
+                        type: integer
+                      name:
+                        type: string
+                      description:
+                        type: string
+                      type:
+                        type: string
+                      display_criteria:
+                        type: integer
+                      is_instantwin:
+                        type: boolean
+                      locked_to_fields:
+                        type: array
+                        items:
+                          type: string
+                      date_range:
+                        type: string
+                        format: date
+                      time_range:
+                        type: string
+                        format: time
+                      esp_identifier:
+                        type: string
+                      message:
+                        type: string
+                      total_prizes:
+                        type: integer
+                      winners:
+                        type: integer
+                      created_on:
+                        type: string
+                        format: datetime
+                    type: object
+        '401':
+          description: |
+            Unauthorized.
+
+            Possible reasons:
+            Token has expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 'message": "Unauthenticated.'
+    patch:
+      tags:
+        - campaigns
+      summary: Campaign Bulk Prize
+      description: |
+        This API patches campaign bulk prize.
+
+        Requires scope:
+        `campaigns.bulk-prizes.modify`
+      security:
+        - clientCredentials:
+            - campaigns.bulk-prizes.modify
+      parameters:
+        - name: campaign
+          in: path
+          description: Campaign id
+          required: true
+          schema:
+            type: integer
+        - name: bulkPrize
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: |
+          name: Must be a string
+          description: Must not be greater than 255 characters
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                locked_to_fields:
+                  type: array
+                  items:
+                    type: integer
+              required:
+                - locked_to_fields
+      responses:
+        '204':
+          description: ''
+        '401':
+          description: |
+            Unauthorized.
+
+            Possible reasons:
+            Token has expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 'message": "Unauthenticated.'
+  '/v1/campaign/{campaign}/bulk-prize/{bulkPrize}/item/{bulkPrizeItem}/send/email':
+    post:
+      tags:
+        - campaigns
+      summary: Send email to winner
+      description: |
+        This API sends the winner email for a specific bulk prize item.
+
+        Requires scope:
+
+        `campaigns.bulk-prizes-items.send-email`
+      security:
+        - clientCredentials:
+            - campaigns.bulk-prizes-items.send-email
+      parameters:
+        - name: campaign
+          in: path
+          description: Campaign id
+          required: true
+          schema:
+            type: integer
+        - name: bulkPrize
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: bulkPrizeItem
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: |
+          name: Must be a string
+          email: Must be a valid email
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                name:
+                  type: string
+      responses:
+        '204':
+          description: ''
+        '401':
+          description: |
+            Unauthorized.
+
+            Possible reasons:
+            Token has expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 'message": "Unauthenticated.'
+  '/v1/campaign/{campaign}/prizes':
+    get:
+      tags:
+        - campaigns
+      summary: Campaign prizes
+      description: |
+        This API list prizes associated with a campaign.
+
+        Requires scope:
+
+        `campaigns.prizes.list`
+      security:
+        - clientCredentials:
+            - campaigns.prizes.list
+      parameters:
+        - name: campaign
+          in: path
+          description: Campaign id
+          required: true
+          schema:
+            type: integer
+        - name: with
+          in: query
+          description: Comma separated list of extra fields to include about the campaigns.
+          required: false
+          schema:
+            type: string
+            enum:
+              - winner
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                        description:
+                          type: string
+                        foreign_key:
+                          type: string
+                        image:
+                          type: string
+                        url:
+                          type: string
+                        value:
+                          type: string
+                        tags:
+                          type: string
+                        winner:
+                          properties:
+                            id:
+                              type: integer
+                            name:
+                              type: string
+                            email:
+                              type: string
+                            fields:
+                              type: object
+                              properties:
+                                integer:
+                                  type: string
+                        control_code:
+                          type: string
+                        sponsor:
+                          properties:
+                            enabled:
+                              type: boolean
+                            company_name:
+                              type: string
+                            contact_name:
+                              type: string
+                            contact_email:
+                              type: string
+                            www:
+                              type: string
+                            logo:
+                              type: string
+                            image:
+                              type: string
+                        created_on:
+                          type: string
+                          format: datetime
+                      type: object
+                  links:
+                    items:
+                      title: base links
+                      properties:
+                        first:
+                          type: string
+                          example: 'https://api.playable.com/v1/route?page=1'
+                        last:
+                          type: string
+                          example: 'https://api.playable.com/v1/route?page=14'
+                        prev:
+                          type: string
+                          example: 'https://api.playable.com/v1/route?page=13'
+                        next:
+                          type: string
+                          example: 'https://api.playable.com/v1/route?page=2'
+                      type: object
+                  meta:
+                    items:
+                      title: base meta
+                      properties:
+                        current_page:
+                          type: integer
+                        from:
+                          type: integer
+                        path:
+                          type: string
+                        per_page:
+                          type: integer
+                        to:
+                          type: integer
+                      type: object
+        '401':
+          description: |
+            Unauthorized.
+
+            Possible reasons:
+            Token has expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 'message": "Unauthenticated.'
+  '/v1/campaign/{campaign}/prize/{prize}':
+    get:
+      tags:
+        - campaigns
+      summary: Campaign prize
+      description: |
+        This API responds with a single campaign prize resource.
+
+        Requires scope:
+
+        `campaigns.prizes.view`
+      security:
+        - clientCredentials:
+            - campaigns.prizes.view
+      parameters:
+        - name: campaign
+          in: path
+          description: Campaign id
+          required: true
+          schema:
+            type: integer
+        - name: prize
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: with
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - winner
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    properties:
+                      id:
+                        type: integer
+                      name:
+                        type: string
+                      description:
+                        type: string
+                      foreign_key:
+                        type: string
+                      image:
+                        type: string
+                      url:
+                        type: string
+                      value:
+                        type: string
+                      tags:
+                        type: string
+                      winner:
+                        properties:
+                          id:
+                            type: integer
+                          name:
+                            type: string
+                          email:
+                            type: string
+                          fields:
+                            type: object
+                            properties:
+                              integer:
+                                type: string
+                      control_code:
+                        type: string
+                      sponsor:
+                        properties:
+                          enabled:
+                            type: boolean
+                          company_name:
+                            type: string
+                          contact_name:
+                            type: string
+                          contact_email:
+                            type: string
+                          www:
+                            type: string
+                          logo:
+                            type: string
+                          image:
+                            type: string
+                      created_on:
+                        type: string
+                        format: datetime
+                    type: object
+        '401':
+          description: |
+            Unauthorized.
+
+            Possible reasons:
+            Token has expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 'message": "Unauthenticated.'
+  '/v1/campaign/{campaign}/registrations':
+    get:
+      tags:
+        - campaigns
+      summary: Campaign registrations
+      description: |
+        This API list registrations associated with a campaign.
+
+        Requires scope:
+
+        `campaigns.registrations.list`
+      security:
+        - clientCredentials:
+            - campaigns.registrations.list
+      parameters:
+        - name: campaign
+          in: path
+          description: Campaign id
+          required: true
+          schema:
+            type: integer
+        - name: with
+          in: query
+          description: |
+            Comma separated list of extra fields to include about the registrations.
+
+            Available options are: prize & leadscore 
+          required: false
+          schema:
+            type: string
+            enum:
+              - prize
+              - leadscore
+        - name: per_page
+          in: query
+          required: false
+          description: Registrations per page. Default is 10 & max is 500.
+          schema:
+            type: integer
+            minimum: 10
+            maximum: 500
+        - name: filter_date_from
+          in: query
+          required: false
+          description: 'Date format: Y-m-d or ISO-8601. Example: 2021-01-01T08:00:00%2B00:00'
+          schema:
+            type: string
+            format: date
+        - name: filter_date_to
+          in: query
+          required: false
+          description: 'Date format: Y-m-d or ISO-8601. Example: 2021-01-01T08:00:00%2B00:00'
+          schema:
+            type: string
+            format: date
+        - name: filter_email
+          in: query
+          required: false
+          description: Filter registrations by email address.
+          schema:
+            type: string
+            format: email
+        - name: filter_winner
+          in: query
+          required: false
+          description: 'Filter by winner status. Pass 1 for winners, 0 for non-winners.'
+          schema:
+            type: integer
+            enum:
+              - 0
+              - 1
+        - name: filter_bulk_prize_won
+          in: query
+          required: false
+          description: Filter registrations that won a specific bulk prize. Pass the bulk prize ID.
+          schema:
+            type: integer
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                        email:
+                          type: string
+                        fields:
+                          additionalProperties:
+                            type: string
+                          type: object
+                        winner:
+                          type: boolean
+                        bulkPrize:
+                          type: boolean
+                        prize:
+                          type: integer
+                        leadscore:
+                          type: integer
+                        created_on:
+                          type: string
+                          format: datetime
+                        created_from_url:
+                          type: string
+                      type: object
+                  links:
+                    items:
+                      title: base links
+                      properties:
+                        first:
+                          type: string
+                          example: 'https://api.playable.com/v1/route?page=1'
+                        last:
+                          type: string
+                          example: 'https://api.playable.com/v1/route?page=14'
+                        prev:
+                          type: string
+                          example: 'https://api.playable.com/v1/route?page=13'
+                        next:
+                          type: string
+                          example: 'https://api.playable.com/v1/route?page=2'
+                      type: object
+                  meta:
+                    items:
+                      title: base meta
+                      properties:
+                        current_page:
+                          type: integer
+                        from:
+                          type: integer
+                        path:
+                          type: string
+                        per_page:
+                          type: integer
+                        to:
+                          type: integer
+                      type: object
+        '401':
+          description: |
+            Unauthorized.
+
+            Possible reasons:
+            Token has expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 'message": "Unauthenticated.'
+  '/v1/campaign/{campaign}/registration/{registration}':
+    get:
+      tags:
+        - campaigns
+      summary: Campaign registration
+      description: |
+        This API responds with a single campaign registration resource.
+
+        Requires scope:
+
+        `campaigns.registrations.view`
+      security:
+        - clientCredentials:
+            - campaigns.registrations.view
+      parameters:
+        - name: campaign
+          in: path
+          description: Campaign id
+          required: true
+          schema:
+            type: integer
+        - name: with
+          in: query
+          description: |
+            Comma separated list of extra fields to include about the registration. 
+            Available options are: prize & leadscore.
+          required: false
+          schema:
+            type: string
+            enum:
+              - prize
+              - leadscore
+        - name: registration
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    properties:
+                      id:
+                        type: integer
+                      name:
+                        type: string
+                      email:
+                        type: string
+                      fields:
+                        additionalProperties:
+                          type: string
+                        type: object
+                      winner:
+                        type: boolean
+                      bulkPrize:
+                        type: boolean
+                      prize:
+                        type: integer
+                      leadscore:
+                        type: integer
+                      created_on:
+                        type: string
+                        format: datetime
+                      created_from_url:
+                        type: string
+                    type: object
+        '401':
+          description: |
+            Unauthorized.
+
+            Possible reasons:
+            Token has expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 'message": "Unauthenticated.'
+    delete:
+      tags:
+        - campaigns
+      summary: Delete campaign registration
+      description: |
+        This API deletes a campaign registration.
+
+        Requires scope:
+
+        `campaigns.registrations.delete`
+      security:
+        - clientCredentials:
+            - campaigns.registrations.delete
+      parameters:
+        - name: campaign
+          in: path
+          description: Campaign id
+          required: true
+          schema:
+            type: integer
+        - name: registration
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ''
+        '401':
+          description: |
+            Unauthorized.
+
+            Possible reasons:
+            Token has expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 'message": "Unauthenticated.'
+  '/v1/campaign/{campaign}/email-log':
+    get:
+      tags:
+        - campaigns
+      summary: Campaign email logs
+      description: |
+        This API lists email logs associated with a campaign.
+
+        Requires scope:
+
+        `campaigns.email-log.list`
+      security:
+        - clientCredentials:
+            - campaigns.email-log.list
+      parameters:
+        - name: campaign
+          in: path
+          description: Campaign id
+          required: true
+          schema:
+            type: integer
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          type: integer
+                        receiver:
+                          type: string
+                        subject:
+                          type: string
+                        status:
+                          type: string
+                        created_on:
+                          type: string
+                          format: datetime
+                      type: object
+                  links:
+                    items:
+                      title: base links
+                      properties:
+                        first:
+                          type: string
+                          example: 'https://api.playable.com/v1/route?page=1'
+                        last:
+                          type: string
+                          example: 'https://api.playable.com/v1/route?page=14'
+                        prev:
+                          type: string
+                          example: 'https://api.playable.com/v1/route?page=13'
+                        next:
+                          type: string
+                          example: 'https://api.playable.com/v1/route?page=2'
+                      type: object
+                  meta:
+                    items:
+                      title: base meta
+                      properties:
+                        current_page:
+                          type: integer
+                        from:
+                          type: integer
+                        path:
+                          type: string
+                        per_page:
+                          type: integer
+                        to:
+                          type: integer
+                      type: object
+        '401':
+          description: |
+            Unauthorized.
+
+            Possible reasons:
+            Token has expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 'message": "Unauthenticated.'
+  '/v1/campaign/{campaign}/email-log/{emailLog}':
+    get:
+      tags:
+        - campaigns
+      summary: Campaign email log
+      description: |
+        This API responds with a single campaign email log resource.
+
+        Requires scope:
+
+        `campaigns.email-log.view`
+      security:
+        - clientCredentials:
+            - campaigns.email-log.view
+      parameters:
+        - name: campaign
+          in: path
+          description: Campaign id
+          required: true
+          schema:
+            type: integer
+        - name: emailLog
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    properties:
+                      id:
+                        type: integer
+                      receiver:
+                        type: string
+                      subject:
+                        type: string
+                      status:
+                        type: string
+                      created_on:
+                        type: string
+                        format: datetime
+                    type: object
+        '401':
+          description: |
+            Unauthorized.
+
+            Possible reasons:
+            Token has expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 'message": "Unauthenticated.'
+  '/v1/campaign/{campaign}/sms-log':
+    get:
+      tags:
+        - campaigns
+      summary: Campaign sms logs
+      description: |
+        This API lists sms logs associated with a campaign.
+
+        Requires scope:
+
+        `campaigns.sms-log.list`
+      security:
+        - clientCredentials:
+            - campaigns.sms-log.list
+      parameters:
+        - name: campaign
+          in: path
+          description: Campaign id
+          required: true
+          schema:
+            type: integer
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          type: integer
+                        mobile_number:
+                          type: string
+                        type:
+                          type: string
+                        status:
+                          type: string
+                        created_on:
+                          type: string
+                          format: datetime
+                      type: object
+                  links:
+                    items:
+                      title: base links
+                      properties:
+                        first:
+                          type: string
+                          example: 'https://api.playable.com/v1/route?page=1'
+                        last:
+                          type: string
+                          example: 'https://api.playable.com/v1/route?page=14'
+                        prev:
+                          type: string
+                          example: 'https://api.playable.com/v1/route?page=13'
+                        next:
+                          type: string
+                          example: 'https://api.playable.com/v1/route?page=2'
+                      type: object
+                  meta:
+                    items:
+                      title: base meta
+                      properties:
+                        current_page:
+                          type: integer
+                        from:
+                          type: integer
+                        path:
+                          type: string
+                        per_page:
+                          type: integer
+                        to:
+                          type: integer
+                      type: object
+        '401':
+          description: |
+            Unauthorized.
+
+            Possible reasons:
+            Token has expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 'message": "Unauthenticated.'
+  '/v1/campaign/{campaign}/sms-log/{smsLog}':
+    get:
+      tags:
+        - campaigns
+      summary: Campaign sms log
+      description: |
+        This API responds with a single campaign sms log resource.
+
+        Requires scope:
+
+        `campaigns.sms-log.view`
+      security:
+        - clientCredentials:
+            - campaigns.sms-log.view
+      parameters:
+        - name: campaign
+          in: path
+          description: Campaign id
+          required: true
+          schema:
+            type: integer
+        - name: smsLog
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    properties:
+                      id:
+                        type: integer
+                      mobile_number:
+                        type: string
+                      type:
+                        type: string
+                      status:
+                        type: string
+                      created_on:
+                        type: string
+                        format: datetime
+                    type: object
+        '401':
+          description: |
+            Unauthorized.
+
+            Possible reasons:
+            Token has expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 'message": "Unauthenticated.'
+  '/v1/campaign/{campaign}/statistics':
+    get:
+      tags:
+        - campaigns
+      summary: Campaign statistics
+      description: |
+        This API responds with campaign statistics.
+
+        Requires scope:
+
+        `campaigns.view`
+      security:
+        - clientCredentials:
+            - campaigns.view
+      parameters:
+        - name: campaign
+          in: path
+          description: Campaign id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    properties:
+                      sessions:
+                        type: integer
+                      registrations:
+                        type: integer
+                      unique_registration:
+                        type: integer
+                      conversion:
+                        type: integer
+                      realtime:
+                        properties:
+                          desktop:
+                            type: integer
+                          tablet:
+                            type: integer
+                          mobile:
+                            type: integer
+                      internal_links:
+                        type: array
+                        items:
+                          type: string
+                      engagement:
+                        properties:
+                          time_spent_average:
+                            type: integer
+                          total_time_spent:
+                            type: integer
+                      tip_a_friend:
+                        type: integer
+                      devices:
+                        properties:
+                          desktop:
+                            type: integer
+                          tablet:
+                            type: integer
+                          mobile:
+                            type: integer
+                      facebook:
+                        properties:
+                          shares:
+                            type: integer
+                          sessions_from_shares:
+                            type: integer
+                      funnel_statistics:
+                        additionalProperties:
+                          type: integer
+                    type: object
+        '401':
+          description: |
+            Unauthorized.
+
+            Possible reasons:
+            Token has expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 'message": "Unauthenticated.'
+  '/v1/campaign/{campaign}/statistics/sessions':
+    get:
+      tags:
+        - campaigns
+      summary: Campaign Statistics Sessions
+      description: |
+        Returns a statistics associated to a campaign.
+
+        Requires scope:
+
+        `campaigns.view`
+      security:
+        - clientCredentials:
+            - campaigns.view
+      parameters:
+        - name: campaign
+          in: path
+          description: Campaign id
+          required: true
+          schema:
+            type: integer
+        - name: filter_date_from
+          in: query
+          required: false
+          description: 'Date format: Y-m-d or ISO-8601. Example: 2021-01-01T08:00:00%2B00:00'
+          schema:
+            type: string
+            format: date
+        - name: filter_date_to
+          in: query
+          required: false
+          description: 'Date format: Y-m-d or ISO-8601. Example: 2021-01-01T08:00:00%2B00:00'
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  date:
+                    type: string
+                    format: date
+                  desktop:
+                    type: integer
+                  tablet:
+                    type: string
+                  mobile:
+                    type: integer
+        '401':
+          description: |
+            Unauthorized.
+
+            Possible reasons:
+            Token has expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 'message": "Unauthenticated.'
+  '/v1/campaign/{campaign}/statistics/registrations':
+    get:
+      tags:
+        - campaigns
+      summary: Campaign Statistics Registrations
+      description: |
+        Returns a statistics associated to a campaign.
+
+        Requires scope:
+
+        `campaigns.view`
+      security:
+        - clientCredentials:
+            - campaigns.view
+      parameters:
+        - name: campaign
+          in: path
+          description: Campaign id
+          required: true
+          schema:
+            type: integer
+        - name: filter_date_from
+          in: query
+          required: false
+          description: 'Date format: Y-m-d or ISO-8601. Example: 2021-01-01T08:00:00%2B00:00'
+          schema:
+            type: string
+            format: date
+        - name: filter_date_to
+          in: query
+          required: false
+          description: 'Date format: Y-m-d or ISO-8601. Example: 2021-01-01T08:00:00%2B00:00'
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    properties:
+                      date:
+                        type: string
+                        format: date
+                      desktop:
+                        type: integer
+                      tablet:
+                        type: integer
+                      mobile:
+                        type: integer
+                    type: object
+        '401':
+          description: |
+            Unauthorized.
+
+            Possible reasons:
+            Token has expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 'message": "Unauthenticated.'
+  '/v1/campaign/{campaign}/clear-cache':
+    post:
+      tags:
+        - campaigns
+      summary: Campaign Clear Cache
+      description: |
+        This API clears the cache of a campaign.
+
+        This specific API has a rate limit of 1 call every 5 minutes.
+        Note that this call gets queued so clearing the cache might not be immediate.
+
+        Requires scope:
+
+        `campaigns.clear-cache`
+      security:
+        - clientCredentials:
+            - campaigns.clear-cache
+      parameters:
+        - name: campaign
+          in: path
+          description: Campaign id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: ''
+        '401':
+          description: |
+            Unauthorized.
+
+            Possible reasons:
+            Token has expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 'message": "Unauthenticated.'
+  '/v1/campaign/{campaign}/game-settings':
+    get:
+      tags:
+        - campaigns
+      summary: View campaign game settings
+      description: |
+        This API returns campaign game settings.
+
+        Note that this API is currently in BETA and only supports 'Poll', 'Wheel of fortune' & 'Spin the bottle' game!
+
+        Requires scope:
+
+        `campaigns.game-settings.view`
+      security:
+        - clientCredentials:
+            - campaigns.game-settings.view
+      parameters:
+        - name: campaign
+          in: path
+          description: Campaign id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - properties:
+                      wheel:
+                        properties:
+                          image:
+                            type: string
+                          slices:
+                            type: string
+                      fields:
+                        properties:
+                          id:
+                            type: integer
+                          action:
+                            type: string
+                  - properties:
+                      question:
+                        type: string
+                      type:
+                        type: string
+                      answers:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            text:
+                              type: string
+                  - properties:
+                      wheel:
+                        properties:
+                          image:
+                            type: string
+                          slices:
+                            type: string
+                      fields:
+                        properties:
+                          id:
+                            type: integer
+                          action:
+                            type: string
+        '401':
+          description: |
+            Unauthorized.
+
+            Possible reasons:
+            Token has expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 'message": "Unauthenticated.'
+    patch:
+      tags:
+        - campaigns
+      summary: Update campaign game settings
+      description: |
+        This API update game settings.
+
+        Note that this API is currently in BETA and only supports 'Poll', 'Wheel of fortune' & 'Spin the bottle' game!
+
+        Requires scope:
+
+        `campaigns.game-settings.modify`
+      security:
+        - clientCredentials:
+            - campaigns.game-settings.modify
+      requestBody:
+        content:
+          application/json:
+            schema:
+              anyOf:
+                - properties:
+                    wheel:
+                      properties:
+                        image:
+                          type: string
+                        slices:
+                          type: string
+                    fields:
+                      properties:
+                        id:
+                          type: integer
+                        action:
+                          type: string
+                - properties:
+                    question:
+                      type: string
+                    type:
+                      type: string
+                    answers:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          text:
+                            type: string
+                - properties:
+                    wheel:
+                      properties:
+                        image:
+                          type: string
+                        slices:
+                          type: string
+                    fields:
+                      properties:
+                        id:
+                          type: integer
+                        action:
+                          type: string
+      parameters:
+        - name: campaign
+          in: path
+          description: Campaign id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: ''
+        '401':
+          description: |
+            Unauthorized.
+
+            Possible reasons:
+            Token has expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 'message": "Unauthenticated.'
+  /v1/media/upload:
+    post:
+      tags:
+        - media
+      summary: Upload media
+      description: |
+        This API uploads a media file. Must be POSTed as form-data.
+
+        Requires scope:
+
+        `media.upload`
+      security:
+        - clientCredentials:
+            - media.upload
+      requestBody:
+        description: |
+          Path for the file to be saved at:
+
+          File to be uploaded.
+          Allowed extensions and their maximum sizes in kilobytes: 
+
+          'png' => 700, 'jpeg' => 700, 'gif' => 4400, 'jpg' => 700, 'svg' => 4400, 
+          'ttf' => 3000, 'pdf' => 4400, 'woff' => 3000, 'woff2' => 3000, 'eot' => 3000,
+          'txt' => 700, 'doc' => 700, 'xls' => 4400, 'xlsx' => 4400, 'ico' => 700,
+          'mp3' => 3000, 'xml' => 4400, 'webp' => 500
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                path:
+                  type: string
+                file:
+                  type: string
+                  format: binary
+              required:
+                - path
+      responses:
+        '204':
+          description: ''
+        '401':
+          description: |
+            Unauthorized.
+
+            Possible reasons:
+            Token has expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 'message": "Unauthenticated.'
+  /v1/user/create-login-token:
+    post:
+      tags:
+        - user
+      summary: Create login user token
+      description: |
+        This API creates a single-use token for signing into the platform.
+        Example of token usage: https://app.playable.com/?loginToken=xyz
+
+        Requires scope:
+
+        `user.create-login-token`
+      security:
+        - clientCredentials:
+            - user.create-login-token
+      requestBody:
+        description: |
+          Role of user. 
+
+          Can be either Basic, BasicNoSubscriberData or Admin. 
+
+          Example: "role": "Basic"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                email:
+                  type: string
+                role:
+                  type: string
+                  enum:
+                    - Basic
+                    - BasicNoSubscriberData
+                    - Admin
+              required:
+                - firstName
+                - lastName
+                - email
+                - role
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+        '401':
+          description: |
+            Unauthorized.
+
+            Possible reasons:
+            Token has expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 'message": "Unauthenticated.'
+servers:
+  - url: 'https://api.playable.com'
+    description: Production
+  - url: 'https://api.dev.playable.com'
+    description: QA
+tags:
+  - name: oauth
+    description: OAuth
+  - name: campaigns
+    description: Campaigns
+components:
+  securitySchemes:
+    clientCredentials:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: /oauth/token
+          scopes:
+            campaigns.list: Grant right to
+            campaigns.view: Grant right to
+            campaigns.pause: Grant right to
+            campaigns.resume: Grant right to
+            campaigns.activate: Grant right to
+            campaigns.integrations.list: Grant right to
+            campaigns.game-data-statistics: Grant right to
+            campaigns.game-settings.view: Grant right to
+            campaigns.game-settings.modify: Grant right to
+            campaigns.sections.list: Grant right to
+            campaigns.sections.view: Grant right to
+            campaigns.sections.form-fields.list: Grant right to
+            campaigns.sections.form-fields.view: Grant right to
+            campaigns.prizes.list: Grant right to
+            campaigns.prizes.view: Grant right to
+            campaigns.bulk-prizes.list: Grant right to
+            campaigns.bulk-prizes.view: Grant right to
+            campaigns.bulk-prizes.modify: Grant right to
+            campaigns.bulk-prizes-items.send-email: Grant right to
+            campaigns.email-log.list: Grant right to
+            campaigns.email-log.view: Grant right to
+            campaigns.sms-log.list: Grant right to
+            campaigns.sms-log.view: Grant right to
+            campaigns.registrations.list: Grant right to
+            campaigns.registrations.view: Grant right to
+            campaigns.registrations.delete: Grant right to
+            campaigns.voucher.list: Grant right to
+            campaigns.voucher.view: Grant right to
+            campaigns.voucher.delete: Grant right to
+            campaigns.types.list: Grant right to
+            campaigns.types.view: Grant right to
+            campaigns.copy: Grant right to
+            campaigns.modify: Grant right to
+            campaigns.delete: Grant right to
+            campaigns.clear-cache: Grant right to
+            media.upload: Grant right to
+            user.create-login-token: Grant right to
+security:
+  - clientCredentials:
+      - campaigns.list
+      - campaigns.view
+      - campaigns.pause
+      - campaigns.resume
+      - campaigns.activate
+      - campaigns.integrations.list
+      - campaigns.game-data-statistics
+      - campaigns.game-settings.view
+      - campaigns.game-settings.modify
+      - campaigns.sections.list
+      - campaigns.sections.view
+      - campaigns.sections.form-fields.list
+      - campaigns.sections.form-fields.view
+      - campaigns.prizes.list
+      - campaigns.prizes.view
+      - campaigns.bulk-prizes.list
+      - campaigns.bulk-prizes.view
+      - campaigns.bulk-prizes.modify
+      - campaigns.bulk-prizes-items.send-email
+      - campaigns.email-log.list
+      - campaigns.email-log.view
+      - campaigns.sms-log.list
+      - campaigns.sms-log.view
+      - campaigns.registrations.list
+      - campaigns.registrations.view
+      - campaigns.registrations.delete
+      - campaigns.voucher.list
+      - campaigns.voucher.view
+      - campaigns.voucher.delete
+      - campaigns.types.list
+      - campaigns.types.view
+      - campaigns.copy
+      - campaigns.modify
+      - campaigns.delete
+      - campaigns.clear-cache
+      - media.upload
+      - user.create-login-token

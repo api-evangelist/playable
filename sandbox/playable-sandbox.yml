@@ -1,0 +1,53 @@
+generated: '2026-08-12'
+method: searched
+source: https://api.playable.com/openapi.yaml
+docs: https://help.playable.com/en/articles/5807069-webhook-integration
+summary: >-
+  Playable publishes a limited test surface. There is no test-mode key prefix, no fixture generator,
+  no time simulation and no published test credentials. What exists is (a) a separate QA API host
+  declared in the OpenAPI servers block and (b) a per-campaign demo URL that runs the real campaign
+  without counting toward live activity, which is the mechanism the documentation names for testing
+  webhook and integration wiring end to end.
+environments:
+- name: Production
+  base_url: https://api.playable.com
+  source: 'openapi servers[0] (description: "Production")'
+- name: QA
+  base_url: https://api.dev.playable.com
+  source: 'openapi servers[1] (description: "QA")'
+  self_serve: false
+  note: >-
+    Declared in the public spec and DNS-resolvable (the host answers), but no documentation explains
+    how to obtain credentials for it, whether customer accounts exist on it, or what data it holds.
+    Treat as provider-internal until Playable documents otherwise.
+key_separation:
+  test_live_prefixes: none
+  note: >-
+    Credentials are per developer app created under Global settings / Developer apps. No test-vs-live
+    key distinction is documented; the same OAuth 2.0 client-credentials pair addresses whichever
+    host you point it at.
+campaign_demo_mode:
+  mechanism: demo URL
+  description: >-
+    Every campaign exposes both a live_url and a demo_url (both are fields on the campaign resource
+    returned by GET /v1/campaigns and GET /v1/campaign/{campaign}). The documented test loop is:
+    play the campaign through its demo URL, then confirm the resulting row under
+    Activity > Registration and, for integrations, the delivery status in the integration log.
+  verification_surfaces:
+  - 'GET /v1/campaign/{campaign}/registrations'
+  - 'GET /v1/campaign/{campaign}/email-log'
+  - 'GET /v1/campaign/{campaign}/sms-log'
+  - 'GET /v1/campaign/{campaign}/integrations'
+magic_test_values:
+  published: false
+  note: >-
+    No test card numbers, test bank accounts, magic identifiers, seeded prize codes or simulated
+    voucher values are published. NOTHING is invented here.
+test_clocks: not supported
+fixtures_or_triggers: not published
+cache_reset:
+  operation: 'POST /v1/campaign/{campaign}/clear-cache'
+  scope: campaigns.clear-cache
+  note: >-
+    The nearest thing to a test-reset primitive in the API — forces the campaign cache to rebuild
+    after changes, which matters given the provider's explicit client-caching expectation.

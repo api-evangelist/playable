@@ -1,0 +1,100 @@
+generated: '2026-08-12'
+method: derived
+source:
+- mcp/playable-mcp.yml
+- openapi/playable-api-openapi.yml
+surfaces:
+  openapi:
+    file: openapi/playable-api-openapi.yml
+    url: https://api.playable.com/openapi.yaml
+    host: https://api.playable.com
+    gated: false
+    note: >-
+      Public and anonymously readable. 41 operations across 36 paths, tags oauth/campaigns/media/user.
+      The spec declares NO operationId on any operation, so every crosswalk row below is keyed by
+      METHOD + path — the only stable identifier the provider publishes.
+  graphql:
+    present: false
+  mcp:
+    url: https://playable.com/wp-json/mcp/mcp-oauth-server
+    host: https://playable.com
+    gated: true
+    note: >-
+      tools/list returns 401 mcp_unauthorized without an OAuth token carrying the `mcp` scope.
+      The tool set is therefore NOT enumerable anonymously and no tool names are asserted here.
+crosswalk: []
+mcp_only: []
+rest_only:
+- capability: authentication
+  operations:
+  - {op: 'POST /oauth/token', summary: Authentication, scope: null}
+- capability: campaign-types
+  operations:
+  - {op: 'GET /v1/campaign-types', summary: Campaign types, scope: campaigns.types.list}
+  - {op: 'GET /v1/campaign-type/{campaignType}', summary: Single campaign type, scope: campaigns.types.view}
+- capability: campaign-lifecycle
+  operations:
+  - {op: 'GET /v1/campaigns', summary: Campaigns list, scope: campaigns.list}
+  - {op: 'GET /v1/campaign/{campaign}', summary: Show a single campaign, scope: campaigns.view}
+  - {op: 'POST /v1/campaign/{campaign}', summary: Update Campaign, scope: campaigns.modify}
+  - {op: 'DELETE /v1/campaign/{campaign}', summary: Delete Campaign, scope: campaigns.delete}
+  - {op: 'POST /v1/campaign/{campaign}/activate', summary: Activate Campaign, scope: campaigns.activate}
+  - {op: 'POST /v1/campaign/{campaign}/pause', summary: Pause Campaign, scope: campaigns.pause}
+  - {op: 'POST /v1/campaign/{campaign}/resume', summary: Resume campaign, scope: campaigns.resume}
+  - {op: 'POST /v1/campaign/copy/{campaign}', summary: Campaign copy, scope: campaigns.copy}
+  - {op: 'POST /v1/campaign/{campaign}/clear-cache', summary: Campaign Clear Cache, scope: campaigns.clear-cache}
+- capability: campaign-structure
+  operations:
+  - {op: 'GET /v1/campaign/{campaign}/sections', summary: Campaign Sections, scope: campaigns.sections.list}
+  - {op: 'GET /v1/campaign/{campaign}/section/{section}', summary: Campaign Section, scope: campaigns.sections.view}
+  - {op: 'GET /v1/campaign/{campaign}/section/{section}/form-fields', summary: Campaign Section Form Fields, scope: campaigns.sections.form-fields.list}
+  - {op: 'GET /v1/campaign/{campaign}/section/{section}/form-field/{formField}', summary: Campaign Section Form Field, scope: campaigns.sections.form-fields.view}
+  - {op: 'GET /v1/campaign/{campaign}/game-settings', summary: View campaign game settings, scope: campaigns.game-settings.view}
+  - {op: 'PATCH /v1/campaign/{campaign}/game-settings', summary: Update campaign game settings, scope: campaigns.game-settings.modify}
+- capability: prizes-and-vouchers
+  operations:
+  - {op: 'GET /v1/campaign/{campaign}/prizes', summary: Campaign prizes, scope: campaigns.prizes.list}
+  - {op: 'GET /v1/campaign/{campaign}/prize/{prize}', summary: Campaign prize, scope: campaigns.prizes.view}
+  - {op: 'GET /v1/campaign/{campaign}/bulk-prizes', summary: Campaign Bulk Prizes, scope: campaigns.bulk-prizes.list}
+  - {op: 'GET /v1/campaign/{campaign}/bulk-prize/{bulkPrize}', summary: Single campaign bulk prize, scope: campaigns.bulk-prizes.view}
+  - {op: 'PATCH /v1/campaign/{campaign}/bulk-prize/{bulkPrize}', summary: Campaign Bulk Prize, scope: campaigns.bulk-prizes.modify}
+  - {op: 'POST /v1/campaign/{campaign}/bulk-prize/{bulkPrize}/item/{bulkPrizeItem}/send/email', summary: Send email to winner, scope: campaigns.bulk-prizes-items.send-email}
+  - {op: 'GET /v1/campaign/{campaign}/vouchers', summary: Campaign vouchers, scope: campaigns.voucher.list}
+  - {op: 'GET /v1/campaign/{campaign}/voucher/{voucher}', summary: Campaign voucher, scope: campaigns.voucher.view}
+  - {op: 'DELETE /v1/campaign/voucher', summary: Delete Campaign vouchers, scope: campaigns.voucher.delete}
+- capability: player-data
+  operations:
+  - {op: 'GET /v1/campaign/{campaign}/registrations', summary: Campaign registrations, scope: campaigns.registrations.list}
+  - {op: 'GET /v1/campaign/{campaign}/registration/{registration}', summary: Campaign registration, scope: campaigns.registrations.view}
+  - {op: 'DELETE /v1/campaign/{campaign}/registration/{registration}', summary: Delete campaign registration, scope: campaigns.registrations.delete}
+- capability: messaging-logs
+  operations:
+  - {op: 'GET /v1/campaign/{campaign}/email-log', summary: Campaign email logs, scope: campaigns.email-log.list}
+  - {op: 'GET /v1/campaign/{campaign}/email-log/{emailLog}', summary: Campaign email log, scope: campaigns.email-log.view}
+  - {op: 'GET /v1/campaign/{campaign}/sms-log', summary: Campaign sms logs, scope: campaigns.sms-log.list}
+  - {op: 'GET /v1/campaign/{campaign}/sms-log/{smsLog}', summary: Campaign sms log, scope: campaigns.sms-log.view}
+- capability: analytics
+  operations:
+  - {op: 'GET /v1/campaign/{campaign}/statistics', summary: Campaign statistics, scope: campaigns.view}
+  - {op: 'GET /v1/campaign/{campaign}/statistics/sessions', summary: Campaign Statistics Sessions, scope: campaigns.view}
+  - {op: 'GET /v1/campaign/{campaign}/statistics/registrations', summary: Campaign Statistics Registrations, scope: campaigns.view}
+  - {op: 'GET /v1/campaign/{campaign}/game-data-statistics', summary: Campaign game data statistic, scope: campaigns.game-data-statistics}
+- capability: integrations
+  operations:
+  - {op: 'GET /v1/campaign/{campaign}/integrations', summary: Campaign Integrations, scope: campaigns.integrations.list}
+- capability: media-and-users
+  operations:
+  - {op: 'POST /v1/media/upload', summary: Upload media, scope: media.upload}
+  - {op: 'POST /v1/user/create-login-token', summary: Create login user token, scope: user.create-login-token}
+coverage:
+  mcp_tools_named: 0
+  mcp_tools_bound: 0
+  mcp_only: 0
+  rest_operations_total: 41
+  rest_operations_with_tool: 0
+  note: >-
+    Zero bindings is the honest finding, not a gap in this pass: the MCP server is served from the
+    WordPress marketing property (playable.com/wp-json/mcp/...) while the machine-readable contract
+    lives on the campaign API host (api.playable.com). They are two disjoint surfaces, and the MCP
+    tool list is auth-gated, so no tool can be bound to an operation without inventing the mapping.
+    Re-run with an authenticated tools/list to populate crosswalk[].

@@ -1,0 +1,69 @@
+generated: '2026-08-12'
+method: searched
+source: openapi/playable-api-openapi.yml
+docs: https://help.playable.com/en/articles/10384051-developer
+reference: https://api.playable.com/
+summary:
+  types:
+  - oauth2
+  oauth2_flows:
+  - clientCredentials
+  api_key_in: []
+  scope_count: 37
+schemes:
+- name: clientCredentials
+  type: oauth2
+  flows:
+  - flow: clientCredentials
+    tokenUrl: /oauth/token
+    absolute_token_url: https://api.playable.com/oauth/token
+    scopes: 37
+  sources:
+  - openapi/playable-api-openapi.yml
+  applied: >-
+    Document-level security requirement lists all 37 scopes; each operation additionally narrows to
+    the single scope it needs, so per-operation least privilege is expressible.
+  naming_note: >-
+    The scheme is named after the grant type ("clientCredentials") rather than given an identity
+    name. Cosmetic, but it means a generated client's scheme identifier reads as a grant.
+request_contract:
+  header: 'Authorization: Bearer {{ACCESS_TOKEN}}'
+  required_accept: application/json
+  accept_note: Only application/json is supported for the response type.
+credentials:
+  self_serve: false
+  where: 'In-platform: Global settings / Developer apps'
+  docs: https://help.playable.com/en/articles/10384051-developer
+  entitlement: >-
+    API integrations are listed only on the Premium tier of the published pricing page; Essentials
+    and Core do not include API access. A prospective integrator cannot obtain credentials without a
+    Premium contract, and there is no public signup or free developer key.
+  rotation_policy: not published
+  key_prefixes: none
+token:
+  grant: client_credentials
+  refresh: false
+  lifetime: not published
+  expiry_signal: >-
+    The only documented failure mode is HTTP 401 with {"message": "Unauthenticated."}, described in
+    the spec as "Token has expired". Re-issue on 401; there is no refresh token in this grant.
+mcp_surface:
+  note: >-
+    A SECOND, unrelated authorization surface exists on the web property for the MCP endpoint —
+    OAuth 2.0 authorization_code + refresh_token with PKCE S256, scope `mcp`, issuer
+    https://playable.com. It is advertised via RFC 8414/RFC 9728 metadata and does NOT govern the
+    campaign API. See mcp/playable-mcp.yml and well-known/playable-well-known.yml.
+other_mechanisms:
+  saml_sso:
+    scope: platform user login only, not API access
+    docs: https://help.playable.com/en/articles/10384051-developer
+  webhook_outbound:
+    note: >-
+      When Playable calls a customer endpoint it can authenticate with OAuth 2.0, a bearer token, or
+      HTTP basic — see asyncapi/playable-webhooks.yml. That is Playable authenticating TO you.
+not_present:
+- apiKey
+- http basic (inbound)
+- openIdConnect discovery
+- mutualTLS
+- request signing / HMAC

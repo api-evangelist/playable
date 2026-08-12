@@ -1,0 +1,50 @@
+generated: '2026-08-12'
+method: searched
+source: https://playable.com/playable-sla/
+versioning:
+  scheme: uri-path
+  current: v1
+  spec_version: 1.0.0
+  docs: https://api.playable.com/
+  policy_published: false
+  note: >-
+    Every resource path is prefixed /v1/. Neither the OpenAPI nor the developer documentation states
+    a version-support window, a breaking-change policy, or how a v2 would be introduced.
+deprecation:
+  policy_url: null
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  note: >-
+    No RFC 8594 Sunset or Deprecation header support is documented, and no operation in the spec is
+    flagged `deprecated: true`. The SLA document versions itself (v1.0 15.05.2023, v1.1 10.10.2023,
+    v2) and links the superseded revision, but that is document versioning, not an API deprecation
+    policy. No `Deprecation` pointer is emitted.
+sla:
+  url: https://playable.com/playable-sla/
+  uptime_target: null
+  uptime_note: The SLA publishes no uptime percentage or availability target.
+  support_hours: 'weekdays 08:00-21:00 CET, chat, in English and Danish (Aarhus DK and London UK)'
+  response_targets:
+  - {severity: critical, response: 'max 30 minutes', workaround: '24 hours', permanent_fix: '30 days'}
+  - {severity: major, response: 'max 4 hours', workaround: '48 hours', permanent_fix: '60 days'}
+  - {severity: minor, response: 'max 4 hours', workaround: '30 days', permanent_fix: 'next software release or 180 days'}
+  service_credits: none published
+  maintenance_windows: not addressed
+status_page:
+  url: https://status.playable.com/
+  platform: Atlassian Statuspage
+  page_id: m522wwxm6yvm
+  components: [Campaigns, Platform, Website]
+  feeds:
+  - https://status.playable.com/history.atom
+  - https://status.playable.com/history.rss
+  api: https://status.playable.com/api/v2/summary.json
+  observed: '2026-08-12 — All Systems Operational'
+changelog:
+  published: false
+  note: >-
+    No dated API or product changelog was found. /changelog/, /release-notes/, /whats-new/ and
+    /product-updates/ all return 404, and the help center has no release-notes collection. The only
+    dated public record of change is the Statuspage incident history. No `ChangeLog` pointer emitted.
+deprecated_operations: []
