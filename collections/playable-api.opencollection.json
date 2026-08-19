@@ -1,0 +1,1500 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Swagger with Laravel",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "client_credentials",
+      "accessTokenUrl": "/oauth/token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "oauth",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Authentication",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.playable.com/oauth/token",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "***Authenticating requests***\n\nTo authenticate requests, include an **`Authorization`** header with the value **`\"Bearer {{ACCESS_TOKEN}}\"`**.\n\nAll authenticated endpoints are marked with a `requires authentication` badge in the documentation below.\n\nYou can create your own app to gain API access under __Global settings__ / __Developer apps__.\n\n* campaigns.list\n* campaigns.view\n* campaigns.pause\n* campaigns.resume\n* campaigns.integrations.list\n* campaigns.game-data-statistics\n* campaigns.section"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "campaigns",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Campaign types",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.playable.com/v1/campaign-types",
+            "params": [
+              {
+                "name": "filter_category",
+                "value": "",
+                "type": "query",
+                "description": "Filter for campaign type category. Available options are: luck, skill, knowledge."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "List all campaign types\nThis API lists all campaign types in the system.\n\nRequires scope:\n\n`campaigns.types.list`\n"
+        },
+        {
+          "info": {
+            "name": "This API responds with a single campaign type resource.\n\nRequires scope:\n\n`campaigns.types.view`\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.playable.com/v1/campaign-type/:campaignType",
+            "params": [
+              {
+                "name": "campaignType",
+                "value": "",
+                "type": "path",
+                "description": "campaignType id"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This API responds with a single campaign type resource.\n\nRequires scope:\n\n`campaigns.types.view`\n"
+        },
+        {
+          "info": {
+            "name": "Campaigns list",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.playable.com/v1/campaigns",
+            "params": [
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Comma separated list which allows for multi-sorting.\nAvailable fields are: name, created_on.\nAvailable options are: asc, desc.\n"
+              },
+              {
+                "name": "filter_template",
+                "value": "",
+                "type": "query",
+                "description": "Filter for campaign templates."
+              },
+              {
+                "name": "filter_name",
+                "value": "",
+                "type": "query",
+                "description": "Filter for specific campaign by name."
+              },
+              {
+                "name": "filter_type",
+                "value": "",
+                "type": "query",
+                "description": "Filter for specific campaign type by alias."
+              },
+              {
+                "name": "filter_display",
+                "value": "",
+                "type": "query",
+                "description": "Filter for active or inactive campaigns."
+              },
+              {
+                "name": "with",
+                "value": "",
+                "type": "query",
+                "description": "Comma separated list of extra fields to include about the campaigns.\nAvailable options are:\nregistrations, sessions, is_instant_win, has_data_wiped, integrations, sections,\nsections.form_fields, bulk_prizes & sections.sessions.\n"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This API lists all campaigns.\n\nRequires scope:\n\n`campaigns.list`\n"
+        },
+        {
+          "info": {
+            "name": "Show a single campaign",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.playable.com/v1/campaign/:campaign",
+            "params": [
+              {
+                "name": "campaign",
+                "value": "",
+                "type": "path",
+                "description": "Campaign id"
+              },
+              {
+                "name": "with",
+                "value": "",
+                "type": "query",
+                "description": "Comma separated list of extra fields to include about the campaigns."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This API responds with a single campaign.\n\nRequires scope:\n\n`campaigns.view`\n"
+        },
+        {
+          "info": {
+            "name": "Update Campaign",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.playable.com/v1/campaign/:campaign",
+            "params": [
+              {
+                "name": "campaign",
+                "value": "",
+                "type": "path",
+                "description": "Campaign id"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This API modifies and responds with an HTTP 204 - No Content. \n\nNotice! minutes & seconds for active_from/to has to be 0.\n\nRequires scope:\n\n`campaigns.modify`\n"
+        },
+        {
+          "info": {
+            "name": "Delete Campaign",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.playable.com/v1/campaign/:campaign",
+            "params": [
+              {
+                "name": "campaign",
+                "value": "",
+                "type": "path",
+                "description": "Campaign id"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This API delete a campaign.\n\nRequires scope:\n\n`campaigns.delete`\n"
+        },
+        {
+          "info": {
+            "name": "Activate Campaign",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.playable.com/v1/campaign/:campaign/activate",
+            "params": [
+              {
+                "name": "campaign",
+                "value": "",
+                "type": "path",
+                "description": "Campaign id"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This API activates and responds with a single campaign resource.\nNotice! active_to cannot be further than the current subscription period & minutes/seconds for active_from/to has to be 0.\n\nRequires scope: \n\n`campaigns.activate`\n"
+        },
+        {
+          "info": {
+            "name": "Pause Campaign",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.playable.com/v1/campaign/:campaign/pause",
+            "params": [
+              {
+                "name": "campaign",
+                "value": "",
+                "type": "path",
+                "description": "Campaign id"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This API pauses a campaign so that it is no longer active.\n\nThis specific API has a rate limit of 1 call every minute.\n\nRequires scope:\n\n`campaigns.pause`\n"
+        },
+        {
+          "info": {
+            "name": "Resume campaign",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.playable.com/v1/campaign/:campaign/resume",
+            "params": [
+              {
+                "name": "campaign",
+                "value": "",
+                "type": "path",
+                "description": "Campaign id"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This API resumes a paused campaign so that it's active once more.\n\nThis specific API has a rate limit of 1 call every minute.\n\nRequires scope:\n`campaigns.resume`\n"
+        },
+        {
+          "info": {
+            "name": "Campaign copy",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.playable.com/v1/campaign/copy/:campaign",
+            "params": [
+              {
+                "name": "campaign",
+                "value": "",
+                "type": "path",
+                "description": "Campaign id"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This API copies and responds with the copy of a campaign.\n\nThis specific API has a rate limit of 10 calls every minute.\n\nRequires scope:\n\n`campaigns.copy`\n"
+        },
+        {
+          "info": {
+            "name": "Campaign vouchers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.playable.com/v1/campaign/:campaign/vouchers",
+            "params": [
+              {
+                "name": "campaign",
+                "value": "",
+                "type": "path",
+                "description": "Campaign id"
+              },
+              {
+                "name": "with",
+                "value": "",
+                "type": "query",
+                "description": "Comma separated list of extra fields to include about the vouchers.\n"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "List all campaign vouchers.\nThis API lists all vouchers associated to the campaign.\n\nRequires scope:\n\n`campaigns.voucher.list`\n"
+        },
+        {
+          "info": {
+            "name": "Campaign voucher",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.playable.com/v1/campaign/:campaign/voucher/:voucher",
+            "params": [
+              {
+                "name": "campaign",
+                "value": "",
+                "type": "path",
+                "description": "Campaign id"
+              },
+              {
+                "name": "voucher",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "with",
+                "value": "",
+                "type": "query",
+                "description": "Comma separated list of extra fields to include about the voucher.\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This API return a single campaign voucher.\n\nRequires scope:\n\n`campaigns.voucher.view`\n"
+        },
+        {
+          "info": {
+            "name": "Delete Campaign vouchers",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.playable.com/v1/campaign/voucher",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Delete campaign vouchers.\nThis API deletes campaign vouchers in the system.\n\nRequires scope:\n\n`campaigns.voucher.delete`\n"
+        },
+        {
+          "info": {
+            "name": "Campaign Integrations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.playable.com/v1/campaign/:campaign/integrations",
+            "params": [
+              {
+                "name": "campaign",
+                "value": "",
+                "type": "path",
+                "description": "Campaign id"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This API list integrations associated with a campaign.\n\nRequires scope:\n\n`campaigns.integrations.list`\n"
+        },
+        {
+          "info": {
+            "name": "Campaign game data statistic",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.playable.com/v1/campaign/:campaign/game-data-statistics",
+            "params": [
+              {
+                "name": "campaign",
+                "value": "",
+                "type": "path",
+                "description": "Campaign id"
+              },
+              {
+                "name": "exclude-ghost",
+                "value": "",
+                "type": "query",
+                "description": "0/1 for whether or not to exclude ghost users. Default value is 0."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This API fetches latest game data statistics.\n\nThis specific API has a rate limit of 1 call every minute.\n\nRequires scope:\n\n`campaigns.game-data-statistics`\n"
+        },
+        {
+          "info": {
+            "name": "Campaign Sections",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.playable.com/v1/campaign/:campaign/sections",
+            "params": [
+              {
+                "name": "campaign",
+                "value": "",
+                "type": "path",
+                "description": "Campaign id"
+              },
+              {
+                "name": "with",
+                "value": "",
+                "type": "query",
+                "description": "Comma separated list of extra fields to include about the sections."
+              },
+              {
+                "name": "filter_area",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "filter_has_addon",
+                "value": "",
+                "type": "query",
+                "description": "Return sections only with the given addon."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This API lists sections associated with a campaign.\n\nRequires scope:\n\n`campaigns.sections.list`\n"
+        },
+        {
+          "info": {
+            "name": "Campaign Section",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.playable.com/v1/campaign/:campaign/section/:section",
+            "params": [
+              {
+                "name": "campaign",
+                "value": "",
+                "type": "path",
+                "description": "Campaign id"
+              },
+              {
+                "name": "section",
+                "value": "",
+                "type": "path",
+                "description": "Section id"
+              },
+              {
+                "name": "with",
+                "value": "",
+                "type": "query",
+                "description": "Comma separated list of extra fields to include about the section."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This API responds with a single campaign section resource.\n\nRequires scope:\n\n`campaigns.sections.view`\n"
+        },
+        {
+          "info": {
+            "name": "Campaign Section Form Field",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.playable.com/v1/campaign/:campaign/section/:section/form-field/:formField",
+            "params": [
+              {
+                "name": "campaign",
+                "value": "",
+                "type": "path",
+                "description": "Campaign id"
+              },
+              {
+                "name": "section",
+                "value": "",
+                "type": "path",
+                "description": "Section id"
+              },
+              {
+                "name": "formField",
+                "value": "",
+                "type": "path",
+                "description": "formField id"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This API responds with a single campaign section form field resource.\n\nRequires scope:\n\n`campaigns.sections.form-fields.view`\n"
+        },
+        {
+          "info": {
+            "name": "Campaign Section Form Fields",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.playable.com/v1/campaign/:campaign/section/:section/form-fields",
+            "params": [
+              {
+                "name": "campaign",
+                "value": "",
+                "type": "path",
+                "description": "Campaign id"
+              },
+              {
+                "name": "section",
+                "value": "",
+                "type": "path",
+                "description": "Section id"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This API lists all form fields associated with a section.\n\nRequires scope:\n\n`campaigns.sections.form-fields.list`\n"
+        },
+        {
+          "info": {
+            "name": "Campaign Bulk Prizes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.playable.com/v1/campaign/:campaign/bulk-prizes",
+            "params": [
+              {
+                "name": "campaign",
+                "value": "",
+                "type": "path",
+                "description": "Campaign id"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This API list bulk prizes associated with a campaign.\n\nRequires scope:\n\n`campaigns.bulk-prizes.list`\n"
+        },
+        {
+          "info": {
+            "name": "Get a single campaign bulk prize resource",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.playable.com/v1/campaign/:campaign/bulk-prize/:bulkPrize",
+            "params": [
+              {
+                "name": "campaign",
+                "value": "",
+                "type": "path",
+                "description": "Campaign id"
+              },
+              {
+                "name": "bulkPrize",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This API responds with a single campaign bulk prize resource.\n\nRequires scope:\n\n`campaigns.bulk-prizes.view`\n"
+        },
+        {
+          "info": {
+            "name": "Campaign Bulk Prize",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.playable.com/v1/campaign/:campaign/bulk-prize/:bulkPrize",
+            "params": [
+              {
+                "name": "campaign",
+                "value": "",
+                "type": "path",
+                "description": "Campaign id"
+              },
+              {
+                "name": "bulkPrize",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This API patches campaign bulk prize.\n\nRequires scope:\n`campaigns.bulk-prizes.modify`\n"
+        },
+        {
+          "info": {
+            "name": "Send email to winner",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.playable.com/v1/campaign/:campaign/bulk-prize/:bulkPrize/item/:bulkPrizeItem/send/email",
+            "params": [
+              {
+                "name": "campaign",
+                "value": "",
+                "type": "path",
+                "description": "Campaign id"
+              },
+              {
+                "name": "bulkPrize",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "bulkPrizeItem",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This API sends the winner email for a specific bulk prize item.\n\nRequires scope:\n\n`campaigns.bulk-prizes-items.send-email`\n"
+        },
+        {
+          "info": {
+            "name": "Campaign prizes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.playable.com/v1/campaign/:campaign/prizes",
+            "params": [
+              {
+                "name": "campaign",
+                "value": "",
+                "type": "path",
+                "description": "Campaign id"
+              },
+              {
+                "name": "with",
+                "value": "",
+                "type": "query",
+                "description": "Comma separated list of extra fields to include about the campaigns."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This API list prizes associated with a campaign.\n\nRequires scope:\n\n`campaigns.prizes.list`\n"
+        },
+        {
+          "info": {
+            "name": "Campaign prize",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.playable.com/v1/campaign/:campaign/prize/:prize",
+            "params": [
+              {
+                "name": "campaign",
+                "value": "",
+                "type": "path",
+                "description": "Campaign id"
+              },
+              {
+                "name": "prize",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "with",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This API responds with a single campaign prize resource.\n\nRequires scope:\n\n`campaigns.prizes.view`\n"
+        },
+        {
+          "info": {
+            "name": "Campaign registrations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.playable.com/v1/campaign/:campaign/registrations",
+            "params": [
+              {
+                "name": "campaign",
+                "value": "",
+                "type": "path",
+                "description": "Campaign id"
+              },
+              {
+                "name": "with",
+                "value": "",
+                "type": "query",
+                "description": "Comma separated list of extra fields to include about the registrations.\n\nAvailable options are: prize & leadscore \n"
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "Registrations per page. Default is 10 & max is 500."
+              },
+              {
+                "name": "filter_date_from",
+                "value": "",
+                "type": "query",
+                "description": "Date format: Y-m-d or ISO-8601. Example: 2021-01-01T08:00:00%2B00:00"
+              },
+              {
+                "name": "filter_date_to",
+                "value": "",
+                "type": "query",
+                "description": "Date format: Y-m-d or ISO-8601. Example: 2021-01-01T08:00:00%2B00:00"
+              },
+              {
+                "name": "filter_email",
+                "value": "",
+                "type": "query",
+                "description": "Filter registrations by email address."
+              },
+              {
+                "name": "filter_winner",
+                "value": "",
+                "type": "query",
+                "description": "Filter by winner status. Pass 1 for winners, 0 for non-winners."
+              },
+              {
+                "name": "filter_bulk_prize_won",
+                "value": "",
+                "type": "query",
+                "description": "Filter registrations that won a specific bulk prize. Pass the bulk prize ID."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This API list registrations associated with a campaign.\n\nRequires scope:\n\n`campaigns.registrations.list`\n"
+        },
+        {
+          "info": {
+            "name": "Campaign registration",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.playable.com/v1/campaign/:campaign/registration/:registration",
+            "params": [
+              {
+                "name": "campaign",
+                "value": "",
+                "type": "path",
+                "description": "Campaign id"
+              },
+              {
+                "name": "with",
+                "value": "",
+                "type": "query",
+                "description": "Comma separated list of extra fields to include about the registration. \nAvailable options are: prize & leadscore.\n"
+              },
+              {
+                "name": "registration",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This API responds with a single campaign registration resource.\n\nRequires scope:\n\n`campaigns.registrations.view`\n"
+        },
+        {
+          "info": {
+            "name": "Delete campaign registration",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.playable.com/v1/campaign/:campaign/registration/:registration",
+            "params": [
+              {
+                "name": "campaign",
+                "value": "",
+                "type": "path",
+                "description": "Campaign id"
+              },
+              {
+                "name": "registration",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This API deletes a campaign registration.\n\nRequires scope:\n\n`campaigns.registrations.delete`\n"
+        },
+        {
+          "info": {
+            "name": "Campaign email logs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.playable.com/v1/campaign/:campaign/email-log",
+            "params": [
+              {
+                "name": "campaign",
+                "value": "",
+                "type": "path",
+                "description": "Campaign id"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This API lists email logs associated with a campaign.\n\nRequires scope:\n\n`campaigns.email-log.list`\n"
+        },
+        {
+          "info": {
+            "name": "Campaign email log",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.playable.com/v1/campaign/:campaign/email-log/:emailLog",
+            "params": [
+              {
+                "name": "campaign",
+                "value": "",
+                "type": "path",
+                "description": "Campaign id"
+              },
+              {
+                "name": "emailLog",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This API responds with a single campaign email log resource.\n\nRequires scope:\n\n`campaigns.email-log.view`\n"
+        },
+        {
+          "info": {
+            "name": "Campaign sms logs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.playable.com/v1/campaign/:campaign/sms-log",
+            "params": [
+              {
+                "name": "campaign",
+                "value": "",
+                "type": "path",
+                "description": "Campaign id"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This API lists sms logs associated with a campaign.\n\nRequires scope:\n\n`campaigns.sms-log.list`\n"
+        },
+        {
+          "info": {
+            "name": "Campaign sms log",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.playable.com/v1/campaign/:campaign/sms-log/:smsLog",
+            "params": [
+              {
+                "name": "campaign",
+                "value": "",
+                "type": "path",
+                "description": "Campaign id"
+              },
+              {
+                "name": "smsLog",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This API responds with a single campaign sms log resource.\n\nRequires scope:\n\n`campaigns.sms-log.view`\n"
+        },
+        {
+          "info": {
+            "name": "Campaign statistics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.playable.com/v1/campaign/:campaign/statistics",
+            "params": [
+              {
+                "name": "campaign",
+                "value": "",
+                "type": "path",
+                "description": "Campaign id"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This API responds with campaign statistics.\n\nRequires scope:\n\n`campaigns.view`\n"
+        },
+        {
+          "info": {
+            "name": "Campaign Statistics Sessions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.playable.com/v1/campaign/:campaign/statistics/sessions",
+            "params": [
+              {
+                "name": "campaign",
+                "value": "",
+                "type": "path",
+                "description": "Campaign id"
+              },
+              {
+                "name": "filter_date_from",
+                "value": "",
+                "type": "query",
+                "description": "Date format: Y-m-d or ISO-8601. Example: 2021-01-01T08:00:00%2B00:00"
+              },
+              {
+                "name": "filter_date_to",
+                "value": "",
+                "type": "query",
+                "description": "Date format: Y-m-d or ISO-8601. Example: 2021-01-01T08:00:00%2B00:00"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Returns a statistics associated to a campaign.\n\nRequires scope:\n\n`campaigns.view`\n"
+        },
+        {
+          "info": {
+            "name": "Campaign Statistics Registrations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.playable.com/v1/campaign/:campaign/statistics/registrations",
+            "params": [
+              {
+                "name": "campaign",
+                "value": "",
+                "type": "path",
+                "description": "Campaign id"
+              },
+              {
+                "name": "filter_date_from",
+                "value": "",
+                "type": "query",
+                "description": "Date format: Y-m-d or ISO-8601. Example: 2021-01-01T08:00:00%2B00:00"
+              },
+              {
+                "name": "filter_date_to",
+                "value": "",
+                "type": "query",
+                "description": "Date format: Y-m-d or ISO-8601. Example: 2021-01-01T08:00:00%2B00:00"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Returns a statistics associated to a campaign.\n\nRequires scope:\n\n`campaigns.view`\n"
+        },
+        {
+          "info": {
+            "name": "Campaign Clear Cache",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.playable.com/v1/campaign/:campaign/clear-cache",
+            "params": [
+              {
+                "name": "campaign",
+                "value": "",
+                "type": "path",
+                "description": "Campaign id"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This API clears the cache of a campaign.\n\nThis specific API has a rate limit of 1 call every 5 minutes.\nNote that this call gets queued so clearing the cache might not be immediate.\n\nRequires scope:\n\n`campaigns.clear-cache`\n"
+        },
+        {
+          "info": {
+            "name": "View campaign game settings",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.playable.com/v1/campaign/:campaign/game-settings",
+            "params": [
+              {
+                "name": "campaign",
+                "value": "",
+                "type": "path",
+                "description": "Campaign id"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This API returns campaign game settings.\n\nNote that this API is currently in BETA and only supports 'Poll', 'Wheel of fortune' & 'Spin the bottle' game!\n\nRequires scope:\n\n`campaigns.game-settings.view`\n"
+        },
+        {
+          "info": {
+            "name": "Update campaign game settings",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.playable.com/v1/campaign/:campaign/game-settings",
+            "params": [
+              {
+                "name": "campaign",
+                "value": "",
+                "type": "path",
+                "description": "Campaign id"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This API update game settings.\n\nNote that this API is currently in BETA and only supports 'Poll', 'Wheel of fortune' & 'Spin the bottle' game!\n\nRequires scope:\n\n`campaigns.game-settings.modify`\n"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "media",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Upload media",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.playable.com/v1/media/upload",
+            "body": {
+              "type": "multipart-form",
+              "data": [
+                {
+                  "name": "path",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "file",
+                  "type": "text",
+                  "value": ""
+                }
+              ]
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This API uploads a media file. Must be POSTed as form-data.\n\nRequires scope:\n\n`media.upload`\n"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "user",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create login user token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.playable.com/v1/user/create-login-token",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This API creates a single-use token for signing into the platform.\nExample of token usage: https://app.playable.com/?loginToken=xyz\n\nRequires scope:\n\n`user.create-login-token`\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
