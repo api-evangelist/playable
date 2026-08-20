@@ -20,6 +20,17 @@ tags:
 - Company
 - marketing-gamification
 - interactive-marketing
+- Campaign Management
+- Zero-Party Data
+- Lead Generation
+- Loyalty
+- MarTech
+- Webhook
+- Authentication
+tags_raw:
+- Company
+- marketing-gamification
+- interactive-marketing
 - campaign-management
 - zero-party-data
 - lead-generation
@@ -39,6 +50,12 @@ apis:
   humanURL: https://api.playable.com/
   baseURL: https://api.playable.com
   tags:
+  - marketing-gamification
+  - Campaign Management
+  - Zero-Party Data
+  - Loyalty
+  - MarTech
+  tags_raw:
   - marketing-gamification
   - campaign-management
   - zero-party-data
@@ -76,6 +93,10 @@ apis:
   humanURL: https://playable.com/
   baseURL: https://playable.com/wp-json/mcp/mcp-oauth-server
   tags:
+  - MCP
+  - agent-native
+  - marketing-gamification
+  tags_raw:
   - mcp
   - agent-native
   - marketing-gamification
@@ -96,6 +117,10 @@ apis:
   humanURL: https://sdk.playable.com/guide/introduction.html
   baseURL: https://sdk.playable.com
   tags:
+  - JavaScript
+  - SDK
+  - marketing-gamification
+  tags_raw:
   - javascript
   - sdk
   - marketing-gamification
