@@ -39,51 +39,6 @@ tags_raw:
 - webhooks
 - oauth2
 apis:
-- name: Playable API
-  description: >-
-    Public REST API for the Playable gamification platform. Covers campaign types, campaign lifecycle
-    (list, view, update, copy, delete, activate, pause, resume, clear cache), campaign sections and
-    registration form fields, prizes and bulk prizes, vouchers, player registrations, email and SMS logs,
-    game data statistics, session/registration analytics, game settings, media upload and login-token
-    creation. OAuth 2.0 client-credentials with 37 fine-grained scopes; 3,600 requests per hour per
-    developer app with X-RateLimit-* and Retry-After response headers.
-  humanURL: https://api.playable.com/
-  baseURL: https://api.playable.com
-  tags:
-  - marketing-gamification
-  - Campaign Management
-  - Zero-Party Data
-  - Loyalty
-  - MarTech
-  tags_raw:
-  - marketing-gamification
-  - campaign-management
-  - zero-party-data
-  - loyalty
-  - martech
-  properties:
-  - type: OpenAPI
-    url: openapi/playable-api-openapi.yml
-  - type: APIReference
-    url: https://api.playable.com/
-  - type: Documentation
-    url: https://help.playable.com/en/articles/10384051-developer
-  - type: GettingStarted
-    url: https://help.playable.com/en/articles/10384051-developer
-  - type: Authentication
-    url: authentication/playable-authentication.yml
-  - type: OAuthScopes
-    url: scopes/playable-scopes.yml
-  - type: Conventions
-    url: conventions/playable-conventions.yml
-  - type: RateLimits
-    url: rate-limits/playable-rate-limits.yml
-  - type: ErrorCatalog
-    url: errors/playable-problem-types.yml
-  - type: DataModel
-    url: data-model/playable-data-model.yml
-  - type: Overlay
-    url: overlays/playable-api-overlay.yaml
 - name: Playable MCP Server
   description: >-
     Hosted Model Context Protocol endpoint served from the Playable web property and advertised through
@@ -111,9 +66,9 @@ apis:
     url: well-known/playable-well-known.yml
 - name: Playable Campaign SDK
   description: >-
-    Browser-side JavaScript SDK (`@playable-marketing/campaign-sdk`) that exposes a promise-based
-    `window.sdk` object plus an event stream so a host page can listen to campaign events and read
-    campaign context filtered by the viewer's permissions. Documented at sdk.playable.com.
+    Browser-side JavaScript SDK (`@playable-marketing/campaign-sdk`) that exposes a promise-based `window.sdk`
+    object plus an event stream so a host page can listen to campaign events and read campaign context
+    filtered by the viewer's permissions. Documented at sdk.playable.com.
   humanURL: https://sdk.playable.com/guide/introduction.html
   baseURL: https://sdk.playable.com
   tags:
@@ -131,6 +86,118 @@ apis:
     url: packages/playable-packages.yml
   - type: SDKs
     url: packages/playable-packages.yml
+- aid: playable:playable-campaigns-api
+  name: Playable Campaigns API
+  description: Campaigns
+  humanURL: https://api.playable.com/
+  baseURL: https://api.playable.com
+  tags:
+  - campaigns
+  properties:
+  - type: OpenAPI
+    url: openapi/playable-campaigns-api-openapi.yml
+  - type: APIReference
+    url: https://api.playable.com/
+  - type: Documentation
+    url: https://help.playable.com/en/articles/10384051-developer
+  - type: GettingStarted
+    url: https://help.playable.com/en/articles/10384051-developer
+  - type: Authentication
+    url: authentication/playable-authentication.yml
+  - type: OAuthScopes
+    url: scopes/playable-scopes.yml
+  - type: Conventions
+    url: conventions/playable-conventions.yml
+  - type: RateLimits
+    url: rate-limits/playable-rate-limits.yml
+  - type: ErrorCatalog
+    url: errors/playable-problem-types.yml
+  - type: DataModel
+    url: data-model/playable-data-model.yml
+- aid: playable:playable-media-api
+  name: Playable Media API
+  description: The media API from Playable — 1 operation(s) for media.
+  humanURL: https://api.playable.com/
+  baseURL: https://api.playable.com
+  tags:
+  - media
+  properties:
+  - type: OpenAPI
+    url: openapi/playable-media-api-openapi.yml
+  - type: APIReference
+    url: https://api.playable.com/
+  - type: Documentation
+    url: https://help.playable.com/en/articles/10384051-developer
+  - type: GettingStarted
+    url: https://help.playable.com/en/articles/10384051-developer
+  - type: Authentication
+    url: authentication/playable-authentication.yml
+  - type: OAuthScopes
+    url: scopes/playable-scopes.yml
+  - type: Conventions
+    url: conventions/playable-conventions.yml
+  - type: RateLimits
+    url: rate-limits/playable-rate-limits.yml
+  - type: ErrorCatalog
+    url: errors/playable-problem-types.yml
+  - type: DataModel
+    url: data-model/playable-data-model.yml
+- aid: playable:playable-oauth-api
+  name: Playable OAUTH API
+  description: OAuth
+  humanURL: https://api.playable.com/
+  baseURL: https://api.playable.com
+  tags:
+  - oauth
+  properties:
+  - type: OpenAPI
+    url: openapi/playable-oauth-api-openapi.yml
+  - type: APIReference
+    url: https://api.playable.com/
+  - type: Documentation
+    url: https://help.playable.com/en/articles/10384051-developer
+  - type: GettingStarted
+    url: https://help.playable.com/en/articles/10384051-developer
+  - type: Authentication
+    url: authentication/playable-authentication.yml
+  - type: OAuthScopes
+    url: scopes/playable-scopes.yml
+  - type: Conventions
+    url: conventions/playable-conventions.yml
+  - type: RateLimits
+    url: rate-limits/playable-rate-limits.yml
+  - type: ErrorCatalog
+    url: errors/playable-problem-types.yml
+  - type: DataModel
+    url: data-model/playable-data-model.yml
+- aid: playable:playable-user-api
+  name: Playable User API
+  description: The user API from Playable — 1 operation(s) for user.
+  humanURL: https://api.playable.com/
+  baseURL: https://api.playable.com
+  tags:
+  - user
+  properties:
+  - type: OpenAPI
+    url: openapi/playable-user-api-openapi.yml
+  - type: APIReference
+    url: https://api.playable.com/
+  - type: Documentation
+    url: https://help.playable.com/en/articles/10384051-developer
+  - type: GettingStarted
+    url: https://help.playable.com/en/articles/10384051-developer
+  - type: Authentication
+    url: authentication/playable-authentication.yml
+  - type: OAuthScopes
+    url: scopes/playable-scopes.yml
+  - type: Conventions
+    url: conventions/playable-conventions.yml
+  - type: RateLimits
+    url: rate-limits/playable-rate-limits.yml
+  - type: ErrorCatalog
+    url: errors/playable-problem-types.yml
+  - type: DataModel
+    url: data-model/playable-data-model.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
