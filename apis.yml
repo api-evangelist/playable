@@ -9,6 +9,18 @@ description: >-
   delivered through a public REST API at api.playable.com documented with an OpenAPI 3.0 definition and secured
   with OAuth 2.0 client-credentials scoped per capability, plus a browser-side campaign SDK published to npm.
   API access is a Premium-plan entitlement; developer apps and credentials are created under Global settings.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://playable.com/wp-content/uploads/2022/09/Logo_Playable_wobble.png
 url: https://raw.githubusercontent.com/api-evangelist/playable/refs/heads/main/apis.yml
 x-type: company
