@@ -1,0 +1,364 @@
+openapi: 3.2.0
+info:
+  title: Swagger with Laravel OAUTH API
+  description: 'This documentation aims to provide all the information you need to work with our API.
+
+
+    ***Rate limiting***
+
+
+    APIs are bound by rate limiting. The default rate limiting allows for 3.600 API interactions an hour per developer app (not IP).
+
+    You are **NOT** allowed to attempt by-pass of rate limiting by creating multiple apps and distribute your traffic across these.
+
+    If an API has a different rate limit it will be described in the description of the API.
+
+
+    ***Every API response contains 2 extra headers***
+
+    1. `X-RateLimit-Limit` max number of requests you can do in the defined period.
+
+    2. `X-RateLimit-Remaining` how many requests you have left before hitting the rate limit.
+
+
+    ***Required Headers***
+
+    1. `Authorization` used to provide credentials that authenticate an application.
+
+    2. `Accept` specifies the response type. Only "application/json" is supported.
+
+
+    Once you''ve hit your rate limit the response will also include `Retry-After`. This will be the seconds in which you will have to wait for doing additional API requests.
+
+
+    ***Throughout***
+
+    The API is designed to allow 3.600 requests per hour per developer app. This is a hard limit and cannot be increased.
+
+
+    ***Caching***
+
+    Playable *expect* implementations to be mindful of not overloading the API with requests.
+
+    Playable **expect** implementations to cache data where possible and only request data when it''s needed.
+
+    If you''re found to be abusing the API by not caching data, you may be subject to rate limiting or have your access revoked.
+
+    '
+  version: 1.0.0
+servers:
+- url: https://api.playable.com
+  description: Production
+- url: https://api.dev.playable.com
+  description: QA
+security:
+- clientCredentials:
+  - campaigns.list
+  - campaigns.view
+  - campaigns.pause
+  - campaigns.resume
+  - campaigns.activate
+  - campaigns.integrations.list
+  - campaigns.game-data-statistics
+  - campaigns.game-settings.view
+  - campaigns.game-settings.modify
+  - campaigns.sections.list
+  - campaigns.sections.view
+  - campaigns.sections.form-fields.list
+  - campaigns.sections.form-fields.view
+  - campaigns.prizes.list
+  - campaigns.prizes.view
+  - campaigns.bulk-prizes.list
+  - campaigns.bulk-prizes.view
+  - campaigns.bulk-prizes.modify
+  - campaigns.bulk-prizes-items.send-email
+  - campaigns.email-log.list
+  - campaigns.email-log.view
+  - campaigns.sms-log.list
+  - campaigns.sms-log.view
+  - campaigns.registrations.list
+  - campaigns.registrations.view
+  - campaigns.registrations.delete
+  - campaigns.voucher.list
+  - campaigns.voucher.view
+  - campaigns.voucher.delete
+  - campaigns.types.list
+  - campaigns.types.view
+  - campaigns.copy
+  - campaigns.modify
+  - campaigns.delete
+  - campaigns.clear-cache
+  - media.upload
+  - user.create-login-token
+tags:
+- name: oauth
+  description: OAuth
+paths:
+  /oauth/token:
+    post:
+      tags:
+      - oauth
+      summary: Authentication
+      description: '***Authenticating requests***
+
+
+        To authenticate requests, include an **`Authorization`** header with the value **`"Bearer {{ACCESS_TOKEN}}"`**.
+
+
+        All authenticated endpoints are marked with a `requires authentication` badge in the documentation below.
+
+
+        You can create your own app to gain API access under __Global settings__ / __Developer apps__.
+
+
+        * campaigns.list
+
+        * campaigns.view
+
+        * campaigns.pause
+
+        * campaigns.resume
+
+        * campaigns.integrations.list
+
+        * campaigns.game-data-statistics
+
+        * campaigns.sections.list
+
+        * campaigns.sections.view
+
+        * campaigns.sections.form-fields.list
+
+        * campaigns.sections.form-fields.view
+
+        * campaigns.prizes.list
+
+        * campaigns.prizes.view
+
+        * campaigns.bulk-prizes.list
+
+        * campaigns.bulk-prizes.view
+
+        * campaigns.bulk-prizes-items.send-email
+
+        * campaigns.email-log.list
+
+        * campaigns.email-log.view
+
+        * campaigns.sms-log.list
+
+        * campaigns.sms-log.view
+
+        * campaigns.registrations.list
+
+        * campaigns.registrations.view
+
+        * campaigns.registrations.delete
+
+        * campaigns.voucher.list
+
+        * campaigns.voucher.view
+
+        * campaigns.voucher.delete
+
+        * campaigns.types.list
+
+        * campaigns.types.view
+
+        * campaigns.copy
+
+        * campaigns.clear-cache
+
+        * media.upload
+
+        * user.create-login-token
+
+
+        ***Issue Token***
+
+
+        This API issues a new access token. List over available scopes can be seen under the authentication introduction.
+
+        Access tokens have a life-span of 1 hour. Once expired you will have to generate a new access token.
+
+        We expect implementations to re-use access tokens generated for as long as they''re active.
+
+
+        Applications found to be generating new access tokens when existing ones haven''t expired may be subject to rate limiting.
+
+        Scope can be declared singular as string or multiple as array within a single request.
+
+        '
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+              - grant_type
+              - client_id
+              - client_secret
+              properties:
+                grant_type:
+                  description: The type of grant being requested
+                  type: string
+                  example: client_credentials
+                client_id:
+                  description: The client ID issued to the client
+                  type: string
+                  example: your-client-id
+                client_secret:
+                  description: The client secret issued to the client
+                  type: string
+                  example: your-client-secret
+                scope:
+                  description: Scopes allowed to interact with
+                  type: array
+                  items:
+                    type: string
+                    enum:
+                    - campaigns.list
+                    - campaigns.view
+                    - campaigns.pause
+                    - campaigns.resume
+                    - campaigns.integrations.list
+                    - campaigns.game-data-statistics
+                    - campaigns.sections.list
+                    - campaigns.sections.view
+                    - campaigns.sections.form-fields.list
+                    - campaigns.sections.form-fields.view
+                    - campaigns.prizes.list
+                    - campaigns.prizes.view
+                    - campaigns.bulk-prizes.list
+                    - campaigns.bulk-prizes.view
+                    - campaigns.bulk-prizes-items.send-email
+                    - campaigns.email-log.list
+                    - campaigns.email-log.view
+                    - campaigns.sms-log.list
+                    - campaigns.sms-log.view
+                    - campaigns.registrations.list
+                    - campaigns.registrations.view
+                    - campaigns.registrations.delete
+                    - campaigns.voucher.list
+                    - campaigns.voucher.view
+                    - campaigns.voucher.delete
+                    - campaigns.types.list
+                    - campaigns.types.view
+                    - campaigns.copy
+                    - campaigns.clear-cache
+                    - media.upload
+                    - user.create-login-token
+                  example:
+                  - campaigns.list
+                  - campaigns.view
+                  - campaigns.pause
+                  - campaigns.resume
+                  - campaigns.integrations.list
+                  - campaigns.game-data-statistics
+                  - campaigns.sections.list
+                  - campaigns.sections.view
+                  - campaigns.sections.form-fields.list
+                  - campaigns.sections.form-fields.view
+                  - campaigns.prizes.list
+                  - campaigns.prizes.view
+                  - campaigns.bulk-prizes.list
+                  - campaigns.bulk-prizes.view
+                  - campaigns.bulk-prizes-items.send-email
+                  - campaigns.email-log.list
+                  - campaigns.email-log.view
+                  - campaigns.sms-log.list
+                  - campaigns.sms-log.view
+                  - campaigns.registrations.list
+                  - campaigns.registrations.view
+                  - campaigns.registrations.delete
+                  - campaigns.voucher.list
+                  - campaigns.voucher.view
+                  - campaigns.voucher.delete
+                  - campaigns.types.list
+                  - campaigns.types.view
+                  - campaigns.copy
+                  - campaigns.clear-cache
+                  - media.upload
+                  - user.create-login-token
+              type: object
+      responses:
+        '200':
+          description: Issue token to api
+          content:
+            application/json:
+              schema:
+                properties:
+                  token_type:
+                    type: string
+                    example: token_type
+                  expires_in:
+                    type: integer
+                    example: '3600'
+                  access_token:
+                    type: string
+                    example: token
+                type: object
+        '400':
+          description: Invalid request
+        '401':
+          description: 'Unauthorized.
+
+
+            Possible reasons:
+
+            Token has expired
+
+            '
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 'message": "Unauthenticated.'
+components:
+  securitySchemes:
+    clientCredentials:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: /oauth/token
+          scopes:
+            campaigns.list: Grant right to
+            campaigns.view: Grant right to
+            campaigns.pause: Grant right to
+            campaigns.resume: Grant right to
+            campaigns.activate: Grant right to
+            campaigns.integrations.list: Grant right to
+            campaigns.game-data-statistics: Grant right to
+            campaigns.game-settings.view: Grant right to
+            campaigns.game-settings.modify: Grant right to
+            campaigns.sections.list: Grant right to
+            campaigns.sections.view: Grant right to
+            campaigns.sections.form-fields.list: Grant right to
+            campaigns.sections.form-fields.view: Grant right to
+            campaigns.prizes.list: Grant right to
+            campaigns.prizes.view: Grant right to
+            campaigns.bulk-prizes.list: Grant right to
+            campaigns.bulk-prizes.view: Grant right to
+            campaigns.bulk-prizes.modify: Grant right to
+            campaigns.bulk-prizes-items.send-email: Grant right to
+            campaigns.email-log.list: Grant right to
+            campaigns.email-log.view: Grant right to
+            campaigns.sms-log.list: Grant right to
+            campaigns.sms-log.view: Grant right to
+            campaigns.registrations.list: Grant right to
+            campaigns.registrations.view: Grant right to
+            campaigns.registrations.delete: Grant right to
+            campaigns.voucher.list: Grant right to
+            campaigns.voucher.view: Grant right to
+            campaigns.voucher.delete: Grant right to
+            campaigns.types.list: Grant right to
+            campaigns.types.view: Grant right to
+            campaigns.copy: Grant right to
+            campaigns.modify: Grant right to
+            campaigns.delete: Grant right to
+            campaigns.clear-cache: Grant right to
+            media.upload: Grant right to
+            user.create-login-token: Grant right to
