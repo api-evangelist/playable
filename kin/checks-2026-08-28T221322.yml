@@ -2,15 +2,15 @@
 kin_checks:
   slug: playable
   schema_version: 0.15.1
-  scored_at: '2026-08-27'
-  run_ts: 2026-08-27T140727
+  scored_at: '2026-08-28'
+  run_ts: 2026-08-28T221322
   note: Actionable checks only (missed + partial). earned/na are every other check
     in rubric/scoring-0.15.1.yml; counts below let you verify that.
   counts:
     total: 130
-    earned: 56
-    partial: 7
-    missed: 43
+    earned: 58
+    partial: 8
+    missed: 40
     na: 24
   checks:
   - id: llms_txt_published
@@ -19,31 +19,22 @@ kin_checks:
     status: missed
   - id: openapi_3_2
     status: missed
-    detail: 0 of 1 openapi documents pass
+    detail: 0 of 4 openapi documents pass
   - id: openapi_3_1
     status: missed
-    detail: 0 of 1 openapi documents pass
+    detail: 0 of 4 openapi documents pass
   - id: info_complete
     status: missed
-    detail: 0 of 1 openapi documents pass
-  - id: servers_defined
-    status: missed
-    detail: 0 of 1 openapi documents pass
+    detail: 0 of 4 openapi documents pass
   - id: operations_operation_ids
     status: missed
-    detail: 0 of 1 openapi documents pass
-  - id: response_coverage
-    status: missed
-    detail: 0 of 1 openapi documents pass
+    detail: 0 of 4 openapi documents pass
   - id: components_reuse
     status: missed
-    detail: 0 of 1 openapi documents pass
-  - id: security_schemes_defined
-    status: missed
-    detail: 0 of 1 openapi documents pass
+    detail: 0 of 4 openapi documents pass
   - id: webhooks_or_callbacks
     status: missed
-    detail: 0 of 1 openapi documents pass
+    detail: 0 of 4 openapi documents pass
   - id: json_schema_present
     status: missed
   - id: json_schema_per_resource
@@ -110,7 +101,7 @@ kin_checks:
     status: missed
   - id: examples_present
     status: partial
-    earned: 2.0
+    earned: 1.4
   - id: conformance_declared
     status: partial
     earned: 1.5
@@ -125,6 +116,10 @@ kin_checks:
     status: partial
     earned: 4.0
     detail: 'grade: documented'
+  - id: openapi_examples
+    status: partial
+    earned: 3.5
+    detail: 'grade: partial'
   - id: rate_limit_signal
     status: partial
     earned: 3.5
