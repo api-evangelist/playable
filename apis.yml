@@ -32,11 +32,11 @@ tags:
 - Company
 - marketing-gamification
 - interactive-marketing
-- Campaign Management
-- Zero-Party Data
-- Lead Generation
-- Loyalty
-- MarTech
+- campaign-management
+- zero-party-data
+- lead-generation
+- loyalty
+- martech
 - Webhook
 - Authentication
 tags_raw:
@@ -84,8 +84,8 @@ apis:
   humanURL: https://sdk.playable.com/guide/introduction.html
   baseURL: https://sdk.playable.com
   tags:
-  - JavaScript
-  - SDK
+  - javascript
+  - sdk
   - marketing-gamification
   tags_raw:
   - javascript
@@ -104,6 +104,8 @@ apis:
   humanURL: https://api.playable.com/
   baseURL: https://api.playable.com
   tags:
+  - Campaigns
+  tags_raw:
   - campaigns
   properties:
   - type: OpenAPI
@@ -132,6 +134,8 @@ apis:
   humanURL: https://api.playable.com/
   baseURL: https://api.playable.com
   tags:
+  - Media
+  tags_raw:
   - media
   properties:
   - type: OpenAPI
@@ -160,6 +164,8 @@ apis:
   humanURL: https://api.playable.com/
   baseURL: https://api.playable.com
   tags:
+  - Authentication
+  tags_raw:
   - oauth
   properties:
   - type: OpenAPI
@@ -188,6 +194,8 @@ apis:
   humanURL: https://api.playable.com/
   baseURL: https://api.playable.com
   tags:
+  - User
+  tags_raw:
   - user
   properties:
   - type: OpenAPI
