@@ -32,11 +32,11 @@ tags:
 - Company
 - marketing-gamification
 - interactive-marketing
-- campaign-management
-- zero-party-data
-- lead-generation
-- loyalty
-- martech
+- Campaign Management
+- Zero-Party Data
+- Lead Generation
+- Loyalty
+- MarTech
 - Webhook
 - Authentication
 tags_raw:
@@ -84,8 +84,8 @@ apis:
   humanURL: https://sdk.playable.com/guide/introduction.html
   baseURL: https://sdk.playable.com
   tags:
-  - javascript
-  - sdk
+  - JavaScript
+  - SDK
   - marketing-gamification
   tags_raw:
   - javascript
