@@ -21,6 +21,22 @@ deliveryModel:
   - pricing
   generated: '2026-08-28'
   method: derived
+accessModel:
+  pricing: paid
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Paid · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  - rate-limits
+  - security
+  - sandbox
+  generated: '2026-09-02'
+  method: derived
 image: https://playable.com/wp-content/uploads/2022/09/Logo_Playable_wobble.png
 url: https://raw.githubusercontent.com/api-evangelist/playable/refs/heads/main/apis.yml
 x-type: company
