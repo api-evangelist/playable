@@ -174,18 +174,18 @@ apis:
     url: errors/playable-problem-types.yml
   - type: DataModel
     url: data-model/playable-data-model.yml
-- aid: playable:playable-oauth-api
-  name: Playable OAUTH API
-  description: OAuth
+- aid: playable:playable-user-api
+  name: Playable User API
+  description: The user API from Playable — 1 operation(s) for user.
   humanURL: https://api.playable.com/
   baseURL: https://api.playable.com
   tags:
-  - Authentication
+  - User
   tags_raw:
-  - oauth
+  - user
   properties:
   - type: OpenAPI
-    url: openapi/playable-oauth-api-openapi.yml
+    url: openapi/playable-user-api-openapi.yml
   - type: APIReference
     url: https://api.playable.com/
   - type: Documentation
@@ -204,18 +204,16 @@ apis:
     url: errors/playable-problem-types.yml
   - type: DataModel
     url: data-model/playable-data-model.yml
-- aid: playable:playable-user-api
-  name: Playable User API
-  description: The user API from Playable — 1 operation(s) for user.
-  humanURL: https://api.playable.com/
-  baseURL: https://api.playable.com
+- aid: playable:playable-oauth-api
+  name: Playable OAUTH API
+  description: OAuth
+  humanURL: https://playable.com/
+  baseURL: https://playable.com/wp-json/mcp/mcp-oauth-server
   tags:
-  - User
-  tags_raw:
-  - user
+  - oauth
   properties:
   - type: OpenAPI
-    url: openapi/playable-user-api-openapi.yml
+    url: openapi/playable-oauth-api-openapi.yml
   - type: APIReference
     url: https://api.playable.com/
   - type: Documentation
