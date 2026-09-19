@@ -210,6 +210,8 @@ apis:
   humanURL: https://playable.com/
   baseURL: https://playable.com/wp-json/mcp/mcp-oauth-server
   tags:
+  - Authentication
+  tags_raw:
   - oauth
   properties:
   - type: OpenAPI
