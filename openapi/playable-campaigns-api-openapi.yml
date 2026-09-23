@@ -1,50 +1,7 @@
 openapi: 3.2.0
 info:
   title: Swagger with Laravel Campaigns API
-  description: 'This documentation aims to provide all the information you need to work with our API.
-
-
-    ***Rate limiting***
-
-
-    APIs are bound by rate limiting. The default rate limiting allows for 3.600 API interactions an hour per developer app (not IP).
-
-    You are **NOT** allowed to attempt by-pass of rate limiting by creating multiple apps and distribute your traffic across these.
-
-    If an API has a different rate limit it will be described in the description of the API.
-
-
-    ***Every API response contains 2 extra headers***
-
-    1. `X-RateLimit-Limit` max number of requests you can do in the defined period.
-
-    2. `X-RateLimit-Remaining` how many requests you have left before hitting the rate limit.
-
-
-    ***Required Headers***
-
-    1. `Authorization` used to provide credentials that authenticate an application.
-
-    2. `Accept` specifies the response type. Only "application/json" is supported.
-
-
-    Once you''ve hit your rate limit the response will also include `Retry-After`. This will be the seconds in which you will have to wait for doing additional API requests.
-
-
-    ***Throughout***
-
-    The API is designed to allow 3.600 requests per hour per developer app. This is a hard limit and cannot be increased.
-
-
-    ***Caching***
-
-    Playable *expect* implementations to be mindful of not overloading the API with requests.
-
-    Playable **expect** implementations to cache data where possible and only request data when it''s needed.
-
-    If you''re found to be abusing the API by not caching data, you may be subject to rate limiting or have your access revoked.
-
-    '
+  description: This documentation aims to provide all the information you need to work with our API.
   version: 1.0.0
 servers:
 - url: https://api.playable.com
@@ -91,13 +48,13 @@ security:
   - media.upload
   - user.create-login-token
 tags:
-- name: campaigns
+- name: Campaigns
   description: Campaigns
 paths:
   /v1/campaign-types:
     get:
       tags:
-      - campaigns
+      - Campaigns
       summary: Campaign types
       description: 'List all campaign types
 
@@ -107,9 +64,7 @@ paths:
         Requires scope:
 
 
-        `campaigns.types.list`
-
-        '
+        `campaigns.types.list`'
       security:
       - clientCredentials:
         - campaigns.types.list
@@ -176,19 +131,13 @@ paths:
                   message:
                     type: string
                     description: 'message": "Unauthenticated.'
+      operationId: getV1CampaignTypes
+      x-operation-id-source: derived
   /v1/campaign-type/{campaignType}:
     get:
       tags:
-      - campaigns
-      summary: 'This API responds with a single campaign type resource.
-
-
-        Requires scope:
-
-
-        `campaigns.types.view`
-
-        '
+      - Campaigns
+      summary: This API responds with a single campaign type resource.
       security:
       - clientCredentials:
         - campaigns.types.view
@@ -245,10 +194,12 @@ paths:
                     description: 'message": "Unauthenticated.'
         '403':
           description: Unable to locate campaign type
+      operationId: getV1CampaignTypeByCampaignType
+      x-operation-id-source: derived
   /v1/campaigns:
     get:
       tags:
-      - campaigns
+      - Campaigns
       summary: Campaigns list
       description: 'This API lists all campaigns.
 
@@ -256,9 +207,7 @@ paths:
         Requires scope:
 
 
-        `campaigns.list`
-
-        '
+        `campaigns.list`'
       security:
       - clientCredentials:
         - campaigns.list
@@ -436,10 +385,12 @@ paths:
                   message:
                     type: string
                     description: 'message": "Unauthenticated.'
+      operationId: getV1Campaigns
+      x-operation-id-source: derived
   /v1/campaign/{campaign}:
     get:
       tags:
-      - campaigns
+      - Campaigns
       summary: Show a single campaign
       description: 'This API responds with a single campaign.
 
@@ -447,9 +398,7 @@ paths:
         Requires scope:
 
 
-        `campaigns.view`
-
-        '
+        `campaigns.view`'
       security:
       - clientCredentials:
         - campaigns.view
@@ -551,11 +500,22 @@ paths:
                   message:
                     type: string
                     description: 'message": "Unauthenticated.'
+      operationId: getV1CampaignByCampaign
+      x-operation-id-source: derived
     post:
       tags:
-      - campaigns
+      - Campaigns
       summary: Update Campaign
-      description: "This API modifies and responds with an HTTP 204 - No Content. \n\nNotice! minutes & seconds for active_from/to has to be 0.\n\nRequires scope:\n\n`campaigns.modify`\n"
+      description: 'This API modifies and responds with an HTTP 204 - No Content.
+
+
+        Notice! minutes & seconds for active_from/to has to be 0.
+
+
+        Requires scope:
+
+
+        `campaigns.modify`'
       security:
       - clientCredentials:
         - campaigns.modify
@@ -617,9 +577,11 @@ paths:
                   message:
                     type: string
                     description: 'message": "Unauthenticated.'
+      operationId: postV1CampaignByCampaign
+      x-operation-id-source: derived
     delete:
       tags:
-      - campaigns
+      - Campaigns
       summary: Delete Campaign
       description: 'This API delete a campaign.
 
@@ -627,9 +589,7 @@ paths:
         Requires scope:
 
 
-        `campaigns.delete`
-
-        '
+        `campaigns.delete`'
       security:
       - clientCredentials:
         - campaigns.delete
@@ -660,12 +620,22 @@ paths:
                   message:
                     type: string
                     description: 'message": "Unauthenticated.'
+      operationId: deleteV1CampaignByCampaign
+      x-operation-id-source: derived
   /v1/campaign/{campaign}/activate:
     post:
       tags:
-      - campaigns
+      - Campaigns
       summary: Activate Campaign
-      description: "This API activates and responds with a single campaign resource.\nNotice! active_to cannot be further than the current subscription period & minutes/seconds for active_from/to has to be 0.\n\nRequires scope: \n\n`campaigns.activate`\n"
+      description: 'This API activates and responds with a single campaign resource.
+
+        Notice! active_to cannot be further than the current subscription period & minutes/seconds for active_from/to has to be 0.
+
+
+        Requires scope:
+
+
+        `campaigns.activate`'
       security:
       - clientCredentials:
         - campaigns.activate
@@ -716,10 +686,12 @@ paths:
                   message:
                     type: string
                     description: 'message": "Unauthenticated.'
+      operationId: postV1CampaignByCampaignActivate
+      x-operation-id-source: derived
   /v1/campaign/{campaign}/pause:
     post:
       tags:
-      - campaigns
+      - Campaigns
       summary: Pause Campaign
       description: 'This API pauses a campaign so that it is no longer active.
 
@@ -730,9 +702,7 @@ paths:
         Requires scope:
 
 
-        `campaigns.pause`
-
-        '
+        `campaigns.pause`'
       security:
       - clientCredentials:
         - campaigns.pause
@@ -763,10 +733,12 @@ paths:
                   message:
                     type: string
                     description: 'message": "Unauthenticated.'
+      operationId: postV1CampaignByCampaignPause
+      x-operation-id-source: derived
   /v1/campaign/{campaign}/resume:
     post:
       tags:
-      - campaigns
+      - Campaigns
       summary: Resume campaign
       description: 'This API resumes a paused campaign so that it''s active once more.
 
@@ -776,9 +748,7 @@ paths:
 
         Requires scope:
 
-        `campaigns.resume`
-
-        '
+        `campaigns.resume`'
       security:
       - clientCredentials:
         - campaigns.resume
@@ -809,10 +779,12 @@ paths:
                   message:
                     type: string
                     description: 'message": "Unauthenticated.'
+      operationId: postV1CampaignByCampaignResume
+      x-operation-id-source: derived
   /v1/campaign/copy/{campaign}:
     post:
       tags:
-      - campaigns
+      - Campaigns
       summary: Campaign copy
       description: 'This API copies and responds with the copy of a campaign.
 
@@ -823,9 +795,7 @@ paths:
         Requires scope:
 
 
-        `campaigns.copy`
-
-        '
+        `campaigns.copy`'
       security:
       - clientCredentials:
         - campaigns.copy
@@ -924,10 +894,12 @@ paths:
                   message:
                     type: string
                     description: 'message": "Unauthenticated.'
+      operationId: postV1CampaignCopyByCampaign
+      x-operation-id-source: derived
   /v1/campaign/{campaign}/vouchers:
     get:
       tags:
-      - campaigns
+      - Campaigns
       summary: Campaign vouchers
       description: 'List all campaign vouchers.
 
@@ -937,9 +909,7 @@ paths:
         Requires scope:
 
 
-        `campaigns.voucher.list`
-
-        '
+        `campaigns.voucher.list`'
       security:
       - clientCredentials:
         - campaigns.voucher.list
@@ -1045,10 +1015,12 @@ paths:
                   message:
                     type: string
                     description: 'message": "Unauthenticated.'
+      operationId: getV1CampaignByCampaignVouchers
+      x-operation-id-source: derived
   /v1/campaign/{campaign}/voucher/{voucher}:
     get:
       tags:
-      - campaigns
+      - Campaigns
       summary: Campaign voucher
       description: 'This API return a single campaign voucher.
 
@@ -1056,9 +1028,7 @@ paths:
         Requires scope:
 
 
-        `campaigns.voucher.view`
-
-        '
+        `campaigns.voucher.view`'
       security:
       - clientCredentials:
         - campaigns.voucher.view
@@ -1128,10 +1098,12 @@ paths:
                   message:
                     type: string
                     description: 'message": "Unauthenticated.'
+      operationId: getV1CampaignByCampaignVoucherByVoucher
+      x-operation-id-source: derived
   /v1/campaign/voucher:
     delete:
       tags:
-      - campaigns
+      - Campaigns
       summary: Delete Campaign vouchers
       description: 'Delete campaign vouchers.
 
@@ -1141,9 +1113,7 @@ paths:
         Requires scope:
 
 
-        `campaigns.voucher.delete`
-
-        '
+        `campaigns.voucher.delete`'
       security:
       - clientCredentials:
         - campaigns.voucher.delete
@@ -1184,10 +1154,12 @@ paths:
                   message:
                     type: string
                     description: 'message": "Unauthenticated.'
+      operationId: deleteV1CampaignVoucher
+      x-operation-id-source: derived
   /v1/campaign/{campaign}/integrations:
     get:
       tags:
-      - campaigns
+      - Campaigns
       summary: Campaign Integrations
       description: 'This API list integrations associated with a campaign.
 
@@ -1195,9 +1167,7 @@ paths:
         Requires scope:
 
 
-        `campaigns.integrations.list`
-
-        '
+        `campaigns.integrations.list`'
       security:
       - clientCredentials:
         - campaigns.integrations.list
@@ -1283,10 +1253,12 @@ paths:
                   message:
                     type: string
                     description: 'message": "Unauthenticated.'
+      operationId: getV1CampaignByCampaignIntegrations
+      x-operation-id-source: derived
   /v1/campaign/{campaign}/game-data-statistics:
     get:
       tags:
-      - campaigns
+      - Campaigns
       summary: Campaign game data statistic
       description: 'This API fetches latest game data statistics.
 
@@ -1297,9 +1269,7 @@ paths:
         Requires scope:
 
 
-        `campaigns.game-data-statistics`
-
-        '
+        `campaigns.game-data-statistics`'
       security:
       - clientCredentials:
         - campaigns.game-data-statistics
@@ -1370,10 +1340,12 @@ paths:
                 type: array
                 items: {}
                 example: []
+      operationId: getV1CampaignByCampaignGameDataStatistics
+      x-operation-id-source: derived
   /v1/campaign/{campaign}/sections:
     get:
       tags:
-      - campaigns
+      - Campaigns
       summary: Campaign Sections
       description: 'This API lists sections associated with a campaign.
 
@@ -1381,9 +1353,7 @@ paths:
         Requires scope:
 
 
-        `campaigns.sections.list`
-
-        '
+        `campaigns.sections.list`'
       security:
       - clientCredentials:
         - campaigns.sections.list
@@ -1501,10 +1471,12 @@ paths:
                   message:
                     type: string
                     description: 'message": "Unauthenticated.'
+      operationId: getV1CampaignByCampaignSections
+      x-operation-id-source: derived
   /v1/campaign/{campaign}/section/{section}:
     get:
       tags:
-      - campaigns
+      - Campaigns
       summary: Campaign Section
       description: 'This API responds with a single campaign section resource.
 
@@ -1512,9 +1484,7 @@ paths:
         Requires scope:
 
 
-        `campaigns.sections.view`
-
-        '
+        `campaigns.sections.view`'
       security:
       - clientCredentials:
         - campaigns.sections.view
@@ -1585,10 +1555,12 @@ paths:
                   message:
                     type: string
                     description: 'message": "Unauthenticated.'
+      operationId: getV1CampaignByCampaignSectionBySection
+      x-operation-id-source: derived
   /v1/campaign/{campaign}/section/{section}/form-field/{formField}:
     get:
       tags:
-      - campaigns
+      - Campaigns
       summary: Campaign Section Form Field
       description: 'This API responds with a single campaign section form field resource.
 
@@ -1596,9 +1568,7 @@ paths:
         Requires scope:
 
 
-        `campaigns.sections.form-fields.view`
-
-        '
+        `campaigns.sections.form-fields.view`'
       security:
       - clientCredentials:
         - campaigns.sections.form-fields.view
@@ -1662,10 +1632,12 @@ paths:
                   message:
                     type: string
                     description: 'message": "Unauthenticated.'
+      operationId: getV1CampaignByCampaignSectionBySectionFormFieldByFormField
+      x-operation-id-source: derived
   /v1/campaign/{campaign}/section/{section}/form-fields:
     get:
       tags:
-      - campaigns
+      - Campaigns
       summary: Campaign Section Form Fields
       description: 'This API lists all form fields associated with a section.
 
@@ -1673,9 +1645,7 @@ paths:
         Requires scope:
 
 
-        `campaigns.sections.form-fields.list`
-
-        '
+        `campaigns.sections.form-fields.list`'
       security:
       - clientCredentials:
         - campaigns.sections.form-fields.list
@@ -1772,10 +1742,12 @@ paths:
                   message:
                     type: string
                     description: 'message": "Unauthenticated.'
+      operationId: getV1CampaignByCampaignSectionBySectionFormFields
+      x-operation-id-source: derived
   /v1/campaign/{campaign}/bulk-prizes:
     get:
       tags:
-      - campaigns
+      - Campaigns
       summary: Campaign Bulk Prizes
       description: 'This API list bulk prizes associated with a campaign.
 
@@ -1783,9 +1755,7 @@ paths:
         Requires scope:
 
 
-        `campaigns.bulk-prizes.list`
-
-        '
+        `campaigns.bulk-prizes.list`'
       security:
       - clientCredentials:
         - campaigns.bulk-prizes.list
@@ -1896,10 +1866,12 @@ paths:
                   message:
                     type: string
                     description: 'message": "Unauthenticated.'
+      operationId: getV1CampaignByCampaignBulkPrizes
+      x-operation-id-source: derived
   /v1/campaign/{campaign}/bulk-prize/{bulkPrize}:
     get:
       tags:
-      - campaigns
+      - Campaigns
       summary: Get a single campaign bulk prize resource
       description: 'This API responds with a single campaign bulk prize resource.
 
@@ -1907,9 +1879,7 @@ paths:
         Requires scope:
 
 
-        `campaigns.bulk-prizes.view`
-
-        '
+        `campaigns.bulk-prizes.view`'
       security:
       - clientCredentials:
         - campaigns.bulk-prizes.view
@@ -1986,18 +1956,18 @@ paths:
                   message:
                     type: string
                     description: 'message": "Unauthenticated.'
+      operationId: getV1CampaignByCampaignBulkPrizeByBulkPrize
+      x-operation-id-source: derived
     patch:
       tags:
-      - campaigns
+      - Campaigns
       summary: Campaign Bulk Prize
       description: 'This API patches campaign bulk prize.
 
 
         Requires scope:
 
-        `campaigns.bulk-prizes.modify`
-
-        '
+        `campaigns.bulk-prizes.modify`'
       security:
       - clientCredentials:
         - campaigns.bulk-prizes.modify
@@ -2054,10 +2024,12 @@ paths:
                   message:
                     type: string
                     description: 'message": "Unauthenticated.'
+      operationId: patchV1CampaignByCampaignBulkPrizeByBulkPrize
+      x-operation-id-source: derived
   /v1/campaign/{campaign}/bulk-prize/{bulkPrize}/item/{bulkPrizeItem}/send/email:
     post:
       tags:
-      - campaigns
+      - Campaigns
       summary: Send email to winner
       description: 'This API sends the winner email for a specific bulk prize item.
 
@@ -2065,9 +2037,7 @@ paths:
         Requires scope:
 
 
-        `campaigns.bulk-prizes-items.send-email`
-
-        '
+        `campaigns.bulk-prizes-items.send-email`'
       security:
       - clientCredentials:
         - campaigns.bulk-prizes-items.send-email
@@ -2123,10 +2093,12 @@ paths:
                   message:
                     type: string
                     description: 'message": "Unauthenticated.'
+      operationId: postV1CampaignByCampaignBulkPrizeByBulkPrizeItemByBulkPrizeItemSendEmail
+      x-operation-id-source: derived
   /v1/campaign/{campaign}/prizes:
     get:
       tags:
-      - campaigns
+      - Campaigns
       summary: Campaign prizes
       description: 'This API list prizes associated with a campaign.
 
@@ -2134,9 +2106,7 @@ paths:
         Requires scope:
 
 
-        `campaigns.prizes.list`
-
-        '
+        `campaigns.prizes.list`'
       security:
       - clientCredentials:
         - campaigns.prizes.list
@@ -2272,10 +2242,12 @@ paths:
                   message:
                     type: string
                     description: 'message": "Unauthenticated.'
+      operationId: getV1CampaignByCampaignPrizes
+      x-operation-id-source: derived
   /v1/campaign/{campaign}/prize/{prize}:
     get:
       tags:
-      - campaigns
+      - Campaigns
       summary: Campaign prize
       description: 'This API responds with a single campaign prize resource.
 
@@ -2283,9 +2255,7 @@ paths:
         Requires scope:
 
 
-        `campaigns.prizes.view`
-
-        '
+        `campaigns.prizes.view`'
       security:
       - clientCredentials:
         - campaigns.prizes.view
@@ -2391,10 +2361,12 @@ paths:
                   message:
                     type: string
                     description: 'message": "Unauthenticated.'
+      operationId: getV1CampaignByCampaignPrizeByPrize
+      x-operation-id-source: derived
   /v1/campaign/{campaign}/registrations:
     get:
       tags:
-      - campaigns
+      - Campaigns
       summary: Campaign registrations
       description: 'This API list registrations associated with a campaign.
 
@@ -2402,9 +2374,7 @@ paths:
         Requires scope:
 
 
-        `campaigns.registrations.list`
-
-        '
+        `campaigns.registrations.list`'
       security:
       - clientCredentials:
         - campaigns.registrations.list
@@ -2558,10 +2528,12 @@ paths:
                   message:
                     type: string
                     description: 'message": "Unauthenticated.'
+      operationId: getV1CampaignByCampaignRegistrations
+      x-operation-id-source: derived
   /v1/campaign/{campaign}/registration/{registration}:
     get:
       tags:
-      - campaigns
+      - Campaigns
       summary: Campaign registration
       description: 'This API responds with a single campaign registration resource.
 
@@ -2569,9 +2541,7 @@ paths:
         Requires scope:
 
 
-        `campaigns.registrations.view`
-
-        '
+        `campaigns.registrations.view`'
       security:
       - clientCredentials:
         - campaigns.registrations.view
@@ -2646,9 +2616,11 @@ paths:
                   message:
                     type: string
                     description: 'message": "Unauthenticated.'
+      operationId: getV1CampaignByCampaignRegistrationByRegistration
+      x-operation-id-source: derived
     delete:
       tags:
-      - campaigns
+      - Campaigns
       summary: Delete campaign registration
       description: 'This API deletes a campaign registration.
 
@@ -2656,9 +2628,7 @@ paths:
         Requires scope:
 
 
-        `campaigns.registrations.delete`
-
-        '
+        `campaigns.registrations.delete`'
       security:
       - clientCredentials:
         - campaigns.registrations.delete
@@ -2694,10 +2664,12 @@ paths:
                   message:
                     type: string
                     description: 'message": "Unauthenticated.'
+      operationId: deleteV1CampaignByCampaignRegistrationByRegistration
+      x-operation-id-source: derived
   /v1/campaign/{campaign}/email-log:
     get:
       tags:
-      - campaigns
+      - Campaigns
       summary: Campaign email logs
       description: 'This API lists email logs associated with a campaign.
 
@@ -2705,9 +2677,7 @@ paths:
         Requires scope:
 
 
-        `campaigns.email-log.list`
-
-        '
+        `campaigns.email-log.list`'
       security:
       - clientCredentials:
         - campaigns.email-log.list
@@ -2796,10 +2766,12 @@ paths:
                   message:
                     type: string
                     description: 'message": "Unauthenticated.'
+      operationId: getV1CampaignByCampaignEmailLog
+      x-operation-id-source: derived
   /v1/campaign/{campaign}/email-log/{emailLog}:
     get:
       tags:
-      - campaigns
+      - Campaigns
       summary: Campaign email log
       description: 'This API responds with a single campaign email log resource.
 
@@ -2807,9 +2779,7 @@ paths:
         Requires scope:
 
 
-        `campaigns.email-log.view`
-
-        '
+        `campaigns.email-log.view`'
       security:
       - clientCredentials:
         - campaigns.email-log.view
@@ -2864,10 +2834,12 @@ paths:
                   message:
                     type: string
                     description: 'message": "Unauthenticated.'
+      operationId: getV1CampaignByCampaignEmailLogByEmailLog
+      x-operation-id-source: derived
   /v1/campaign/{campaign}/sms-log:
     get:
       tags:
-      - campaigns
+      - Campaigns
       summary: Campaign sms logs
       description: 'This API lists sms logs associated with a campaign.
 
@@ -2875,9 +2847,7 @@ paths:
         Requires scope:
 
 
-        `campaigns.sms-log.list`
-
-        '
+        `campaigns.sms-log.list`'
       security:
       - clientCredentials:
         - campaigns.sms-log.list
@@ -2966,10 +2936,12 @@ paths:
                   message:
                     type: string
                     description: 'message": "Unauthenticated.'
+      operationId: getV1CampaignByCampaignSmsLog
+      x-operation-id-source: derived
   /v1/campaign/{campaign}/sms-log/{smsLog}:
     get:
       tags:
-      - campaigns
+      - Campaigns
       summary: Campaign sms log
       description: 'This API responds with a single campaign sms log resource.
 
@@ -2977,9 +2949,7 @@ paths:
         Requires scope:
 
 
-        `campaigns.sms-log.view`
-
-        '
+        `campaigns.sms-log.view`'
       security:
       - clientCredentials:
         - campaigns.sms-log.view
@@ -3033,10 +3003,12 @@ paths:
                   message:
                     type: string
                     description: 'message": "Unauthenticated.'
+      operationId: getV1CampaignByCampaignSmsLogBySmsLog
+      x-operation-id-source: derived
   /v1/campaign/{campaign}/statistics:
     get:
       tags:
-      - campaigns
+      - Campaigns
       summary: Campaign statistics
       description: 'This API responds with campaign statistics.
 
@@ -3044,9 +3016,7 @@ paths:
         Requires scope:
 
 
-        `campaigns.view`
-
-        '
+        `campaigns.view`'
       security:
       - clientCredentials:
         - campaigns.view
@@ -3130,10 +3100,12 @@ paths:
                   message:
                     type: string
                     description: 'message": "Unauthenticated.'
+      operationId: getV1CampaignByCampaignStatistics
+      x-operation-id-source: derived
   /v1/campaign/{campaign}/statistics/sessions:
     get:
       tags:
-      - campaigns
+      - Campaigns
       summary: Campaign Statistics Sessions
       description: 'Returns a statistics associated to a campaign.
 
@@ -3141,9 +3113,7 @@ paths:
         Requires scope:
 
 
-        `campaigns.view`
-
-        '
+        `campaigns.view`'
       security:
       - clientCredentials:
         - campaigns.view
@@ -3202,10 +3172,12 @@ paths:
                   message:
                     type: string
                     description: 'message": "Unauthenticated.'
+      operationId: getV1CampaignByCampaignStatisticsSessions
+      x-operation-id-source: derived
   /v1/campaign/{campaign}/statistics/registrations:
     get:
       tags:
-      - campaigns
+      - Campaigns
       summary: Campaign Statistics Registrations
       description: 'Returns a statistics associated to a campaign.
 
@@ -3213,9 +3185,7 @@ paths:
         Requires scope:
 
 
-        `campaigns.view`
-
-        '
+        `campaigns.view`'
       security:
       - clientCredentials:
         - campaigns.view
@@ -3276,10 +3246,12 @@ paths:
                   message:
                     type: string
                     description: 'message": "Unauthenticated.'
+      operationId: getV1CampaignByCampaignStatisticsRegistrations
+      x-operation-id-source: derived
   /v1/campaign/{campaign}/clear-cache:
     post:
       tags:
-      - campaigns
+      - Campaigns
       summary: Campaign Clear Cache
       description: 'This API clears the cache of a campaign.
 
@@ -3292,9 +3264,7 @@ paths:
         Requires scope:
 
 
-        `campaigns.clear-cache`
-
-        '
+        `campaigns.clear-cache`'
       security:
       - clientCredentials:
         - campaigns.clear-cache
@@ -3325,10 +3295,12 @@ paths:
                   message:
                     type: string
                     description: 'message": "Unauthenticated.'
+      operationId: postV1CampaignByCampaignClearCache
+      x-operation-id-source: derived
   /v1/campaign/{campaign}/game-settings:
     get:
       tags:
-      - campaigns
+      - Campaigns
       summary: View campaign game settings
       description: 'This API returns campaign game settings.
 
@@ -3339,9 +3311,7 @@ paths:
         Requires scope:
 
 
-        `campaigns.game-settings.view`
-
-        '
+        `campaigns.game-settings.view`'
       security:
       - clientCredentials:
         - campaigns.game-settings.view
@@ -3416,9 +3386,11 @@ paths:
                   message:
                     type: string
                     description: 'message": "Unauthenticated.'
+      operationId: getV1CampaignByCampaignGameSettings
+      x-operation-id-source: derived
     patch:
       tags:
-      - campaigns
+      - Campaigns
       summary: Update campaign game settings
       description: 'This API update game settings.
 
@@ -3429,9 +3401,7 @@ paths:
         Requires scope:
 
 
-        `campaigns.game-settings.modify`
-
-        '
+        `campaigns.game-settings.modify`'
       security:
       - clientCredentials:
         - campaigns.game-settings.modify
@@ -3507,6 +3477,8 @@ paths:
                   message:
                     type: string
                     description: 'message": "Unauthenticated.'
+      operationId: patchV1CampaignByCampaignGameSettings
+      x-operation-id-source: derived
 components:
   securitySchemes:
     clientCredentials:

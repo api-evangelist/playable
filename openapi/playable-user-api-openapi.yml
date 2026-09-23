@@ -1,50 +1,7 @@
 openapi: 3.2.0
 info:
   title: Swagger with Laravel User API
-  description: 'This documentation aims to provide all the information you need to work with our API.
-
-
-    ***Rate limiting***
-
-
-    APIs are bound by rate limiting. The default rate limiting allows for 3.600 API interactions an hour per developer app (not IP).
-
-    You are **NOT** allowed to attempt by-pass of rate limiting by creating multiple apps and distribute your traffic across these.
-
-    If an API has a different rate limit it will be described in the description of the API.
-
-
-    ***Every API response contains 2 extra headers***
-
-    1. `X-RateLimit-Limit` max number of requests you can do in the defined period.
-
-    2. `X-RateLimit-Remaining` how many requests you have left before hitting the rate limit.
-
-
-    ***Required Headers***
-
-    1. `Authorization` used to provide credentials that authenticate an application.
-
-    2. `Accept` specifies the response type. Only "application/json" is supported.
-
-
-    Once you''ve hit your rate limit the response will also include `Retry-After`. This will be the seconds in which you will have to wait for doing additional API requests.
-
-
-    ***Throughout***
-
-    The API is designed to allow 3.600 requests per hour per developer app. This is a hard limit and cannot be increased.
-
-
-    ***Caching***
-
-    Playable *expect* implementations to be mindful of not overloading the API with requests.
-
-    Playable **expect** implementations to cache data where possible and only request data when it''s needed.
-
-    If you''re found to be abusing the API by not caching data, you may be subject to rate limiting or have your access revoked.
-
-    '
+  description: This documentation aims to provide all the information you need to work with our API.
   version: 1.0.0
 servers:
 - url: https://api.playable.com
@@ -91,12 +48,12 @@ security:
   - media.upload
   - user.create-login-token
 tags:
-- name: user
+- name: User
 paths:
   /v1/user/create-login-token:
     post:
       tags:
-      - user
+      - User
       summary: Create login user token
       description: 'This API creates a single-use token for signing into the platform.
 
@@ -106,9 +63,7 @@ paths:
         Requires scope:
 
 
-        `user.create-login-token`
-
-        '
+        `user.create-login-token`'
       security:
       - clientCredentials:
         - user.create-login-token
@@ -163,6 +118,8 @@ paths:
                   message:
                     type: string
                     description: 'message": "Unauthenticated.'
+      operationId: postV1UserCreateLoginToken
+      x-operation-id-source: derived
 components:
   securitySchemes:
     clientCredentials:
