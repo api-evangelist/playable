@@ -1,6 +1,6 @@
 openapi: 3.2.0
 info:
-  title: Swagger with Laravel OAUTH API
+  title: Swagger with Laravel OAuth API
   description: This documentation aims to provide all the information you need to work with our API.
   version: 1.0.0
 servers:

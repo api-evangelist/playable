@@ -9,9 +9,7 @@
     "playable-oauth-api-openapi.yml",
     "playable-user-api-openapi.yml"
   ],
-  "archived": [
-    "deleted 1 superseded output(s) from the previous generation"
-  ],
+  "archived": [],
   "errors": [],
   "warnings": [],
   "notes": [
@@ -20,14 +18,13 @@
     "playable-api-openapi.yml: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
     "playable-api-openapi.yml: declared missing tag: media",
     "playable-api-openapi.yml: declared missing tag: user",
-    "superseded outputs removed: playable-o-auth-api-openapi.yml",
-    "apis.yml register: written (+1 apis, 6 total)"
+    "apis.yml register: already-registered"
   ],
   "skipped": [
     "_original/playable-openapi-original.yml: archived document superseded by a larger archived document",
     "playable-campaigns-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "playable-media-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "playable-o-auth-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "playable-oauth-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "playable-user-api-openapi.yml: previously refined output, superseded by openapi/_original/"
   ]
 }
