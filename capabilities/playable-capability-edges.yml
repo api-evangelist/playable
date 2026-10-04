@@ -1,0 +1,27 @@
+slug: playable
+provider: Playable
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 1
+edges:
+- tag: Campaigns
+  spec_file: playable-campaigns-api-openapi.yml
+  capability_id: BC-400.40
+  capability_id_l1: BC-400
+  capability_name: Demand Generation Management
+  confidence: 0.7
+  evidence: GET /v1/campaigns  getV1Campaigns  Campaigns list; POST /v1/campaign/{campaign}/activate  Activate
+    Campaign; GET /v1/campaign/{campaign}/vouchers  Campaign vouchers
+  reason: Operations manage the lifecycle of interactive marketing campaigns (create/update, activate,
+    pause, resume, copy) and their vouchers for a gamification/lead-capture platform — marketing campaign
+    execution. Demand Generation is the closest sub-capability, though Digital Marketing or Promotions
+    are plausible alternates, so 0.7.
