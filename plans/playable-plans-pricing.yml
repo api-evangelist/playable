@@ -64,3 +64,27 @@ limits_attached_to_tiers:
     See rate-limits/playable-rate-limits.yml.
 x-evidence:
 - {fetched: '2026-08-12', url: 'https://playable.com/pricing/', http_status: 200}
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models: []
+  units: []
+  plans:
+  - name: Essentials
+    access: other
+    model: unstated
+    model_how: derived
+    units: []
+    periods: []
+  - name: Core
+    access: other
+    model: unstated
+    model_how: derived
+    units: []
+    periods: []
+  - name: Premium
+    access: other
+    model: unstated
+    model_how: derived
+    units: []
+    periods: []
