@@ -1,0 +1,34 @@
+generated: '2026-10-14'
+method: searched
+checked:
+- https://vendor-list.consensu.org/v3/vendor-list.json
+marketplace_apps: []
+edges:
+- partner_name: IAB Europe TCF Global Vendor List
+  partner: null
+  partner_match: domain
+  type: contract
+  channel: standard-directory
+  relationship: standard-participant
+  direction: partner-built
+  evidence: https://vendor-list.consensu.org/v3/vendor-list.json
+  contract_reference:
+    register: IAB Europe TCF Global Vendor List
+    spec_file: null
+    role: tcf-vendor
+    registered_name: Playable ApS
+    register_id: '1495'
+    products:
+    - Playable ApS
+    matched_domain: playable.com
+    api_families:
+    - purpose-1
+    - purpose-9
+    - special-purpose-1
+    - special-purpose-2
+    - special-purpose-3
+    api_families_basis: TCF purposes, special purposes, features and special features declared on the registration
+    detected_by: sweep-adtech.py
+    detected: '2026-10-14'
+  detected_by: sweep-adtech.py
+  detected: '2026-10-14'
