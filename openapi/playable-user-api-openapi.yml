@@ -165,3 +165,9 @@ components:
             campaigns.clear-cache: Grant right to
             media.upload: Grant right to
             user.create-login-token: Grant right to
+x-provenance:
+  method: harvested
+  publisher: Playable
+  source: https://api.playable.com/openapi.yaml
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
